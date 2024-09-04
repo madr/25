@@ -35,3 +35,4 @@ mse25-*.tar
 npm-debug.log
 /assets/node_modules/
 
+config/dev.secret.exs
