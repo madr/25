@@ -1,10 +1,22 @@
 defmodule Mse25.Directus do
-  def get_page(slug) do
-    get_item(:pages, slug)
+  def get_article(slug) do
+    get_item(:articles, slug)
   end
 
-  def get_link(slug) do
-    get_item(:links, slug)
+  def get_articles(options \\ []) do
+    params =
+      [
+        "sort=-pubDate",
+        "fields=" <> Enum.join([
+          "slug",
+          "title",
+          "date_updated",
+          "pubDate"
+        ], ",")
+      ]
+      |> query_params_string(options)
+
+    get("/articles?" <> params)
   end
 
   def get_event(slug) do
@@ -18,18 +30,60 @@ defmodule Mse25.Directus do
         "poster.width",
         "poster.height",
         "bands.artists_id.name",
-        "mia.artists_id.name"
+        "mia.artists_id.name",
+        "location.name"
       ]
       |> Enum.join(",")
     )
   end
 
-  def get_article(slug) do
-    get_item(:articles, slug)
+  def get_events(options \\ []) do
+    params =
+      [
+        "sort=-started_at",
+        #"filter={\"upcoming\":{\"_eq\":true}}",
+        "fields=" <> Enum.join([
+          "started_at",
+          "ended_at",
+          "title",
+          "lead",
+          "poster.filename_download",
+          "poster.width",
+          "poster.height",
+          "bands.artists_id.name",
+          "mia.artists_id.name"
+        ], ",")      
+      ]
+      |> query_params_string(options)
+
+    get("/events?" <> params)
   end
 
-  def get_events(collection) do
-    get("/" <> to_string(collection))
+  def get_link(slug) do
+    get_item(:links, slug)
+  end
+
+  def get_links(options \\ []) do
+    params =
+      [
+        "sort=-pubDate",
+        "fields=" <> Enum.join([
+          "slug",
+          "title",
+          "date_updated",
+          "pubDate",
+          "h1",
+          "source",
+          "contents"
+        ], ",")
+      ]
+      |> query_params_string(options)
+
+    get("/links?" <> params)
+  end
+
+  def get_page(slug) do
+    get_item(:pages, slug)
   end
 
   defp get_item(collection, slug, fields \\ "*") do
@@ -50,4 +104,25 @@ defmodule Mse25.Directus do
   end
 
   defp payload(%Req.Response{body: %{"data" => payload}}), do: payload
+
+  defp query_params_string(params, options),
+    do:
+      params
+      |> limit?(options)
+      |> page?(options)
+      |> Enum.join("&")
+
+  defp limit?(params, opts) do
+    case opts[:limit] do
+      nil -> params
+      lmt = _ -> ["limit=" <> to_string(lmt) | params]
+    end
+  end
+
+  defp page?(params, opts) do
+    case opts[:page] do
+      nil -> params
+      pg = _ -> ["page=" <> to_string(pg) | params]
+    end
+  end
 end
