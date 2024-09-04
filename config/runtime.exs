@@ -50,6 +50,20 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
+  directus_url =
+    System.get_env("DIRECTUS_URL") ||
+      raise """
+          environment variable DIRECTUS_URL is missing.
+      """
+
+  directus_token =
+    System.get_env("DIRECTUS_TOKEN") ||
+      raise """
+          environment variable DIRECTUS_TOKEN is missing.
+      """
+
+  config :mse25, :directus, base_url: directus_url, token: directus_token
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
