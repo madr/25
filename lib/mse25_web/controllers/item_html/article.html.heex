@@ -1,0 +1,12 @@
+<article>
+<header>
+<date><%= @published_at %></date>
+<h1><%= @heading %></h1>
+</header>
+
+<%= raw @contents %>
+
+<footer>
+<p>Skribent: Anders Englöf Ytterström. Publicerad <%= @published_at %> och senast uppdaterad <%= @updated_at %>.</p>
+</footer>
+</article>
