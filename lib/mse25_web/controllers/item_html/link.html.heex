@@ -1,0 +1,14 @@
+<article>
+<header>
+<date><%= @published_at %></date>
+<h1><%= @heading %></h1>
+</header>
+
+<%= raw @contents %>
+<p>
+Källa: <a href={@url} rel="external"><%= @title %></a>
+</p>
+<footer>
+<p>Skribent: Anders Englöf Ytterström. Publicerad <%= @published_at %>.</p>
+</footer>
+</article>
