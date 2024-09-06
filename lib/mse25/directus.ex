@@ -7,12 +7,16 @@ defmodule Mse25.Directus do
     params =
       [
         "sort=-pubDate",
-        "fields=" <> Enum.join([
-          "slug",
-          "title",
-          "date_updated",
-          "pubDate"
-        ], ",")
+        "fields=" <>
+          Enum.join(
+            [
+              "slug",
+              "title",
+              "date_updated",
+              "pubDate"
+            ],
+            ","
+          )
       ]
       |> query_params_string(options)
 
@@ -41,18 +45,22 @@ defmodule Mse25.Directus do
     params =
       [
         "sort=-started_at",
-        #"filter={\"upcoming\":{\"_eq\":true}}",
-        "fields=" <> Enum.join([
-          "started_at",
-          "ended_at",
-          "title",
-          "lead",
-          "poster.filename_download",
-          "poster.width",
-          "poster.height",
-          "bands.artists_id.name",
-          "mia.artists_id.name"
-        ], ",")      
+        # "filter={\"upcoming\":{\"_eq\":true}}",
+        "fields=" <>
+          Enum.join(
+            [
+              "started_at",
+              "ended_at",
+              "title",
+              "lead",
+              "poster.filename_download",
+              "poster.width",
+              "poster.height",
+              "bands.artists_id.name",
+              "mia.artists_id.name"
+            ],
+            ","
+          )
       ]
       |> query_params_string(options)
 
@@ -67,15 +75,19 @@ defmodule Mse25.Directus do
     params =
       [
         "sort=-pubDate",
-        "fields=" <> Enum.join([
-          "slug",
-          "title",
-          "date_updated",
-          "pubDate",
-          "h1",
-          "source",
-          "contents"
-        ], ",")
+        "fields=" <>
+          Enum.join(
+            [
+              "slug",
+              "title",
+              "date_updated",
+              "pubDate",
+              "h1",
+              "source",
+              "contents"
+            ],
+            ","
+          )
       ]
       |> query_params_string(options)
 
@@ -99,11 +111,16 @@ defmodule Mse25.Directus do
     [base_url: base_url, token: token] = Application.fetch_env!(:mse25, :directus)
     req = Req.new(base_url: base_url <> "/items")
 
-    Req.get!(req, url: resource, auth: {:bearer, token})
-    |> payload
+    case Req.get!(req, url: resource, auth: {:bearer, token})
+         |> payload do
+      {:ok, payload} -> payload
+      {:forbidden, message} -> message
+    end
   end
 
-  defp payload(%Req.Response{body: %{"data" => payload}}), do: payload
+  defp payload(%Req.Response{status: 200, body: %{"data" => payload}}), do: {:ok, payload}
+
+  defp payload(%Req.Response{status: 401}), do: {:forbidden, "Invalid Directus credentials"}
 
   defp query_params_string(params, options),
     do:
