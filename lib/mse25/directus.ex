@@ -3,7 +3,7 @@ defmodule Mse25.Directus do
     get_item(:articles, slug)
   end
 
-  def get_articles(options \\ []) do
+  def get_articles!(options \\ []) do
     params =
       [
         "sort=-pubDate",
@@ -18,7 +18,7 @@ defmodule Mse25.Directus do
             ","
           )
       ]
-      |> query_params_string(options)
+      |> query_params_string(options, :articles)
 
     get("/articles?" <> params)
   end
@@ -41,18 +41,16 @@ defmodule Mse25.Directus do
     )
   end
 
-  def get_events(options \\ []) do
+  def get_events!(options \\ []) do
     params =
       [
         "sort=-started_at",
-        # "filter={\"upcoming\":{\"_eq\":true}}",
         "fields=" <>
           Enum.join(
             [
-              "started_at",
-              "ended_at",
               "title",
               "lead",
+              "slug",
               "poster.filename_download",
               "poster.width",
               "poster.height",
@@ -62,7 +60,7 @@ defmodule Mse25.Directus do
             ","
           )
       ]
-      |> query_params_string(options)
+      |> query_params_string(options, :events)
 
     get("/events?" <> params)
   end
@@ -71,7 +69,7 @@ defmodule Mse25.Directus do
     get_item(:links, slug)
   end
 
-  def get_links(options \\ []) do
+  def get_links!(options \\ []) do
     params =
       [
         "sort=-pubDate",
@@ -89,7 +87,7 @@ defmodule Mse25.Directus do
             ","
           )
       ]
-      |> query_params_string(options)
+      |> query_params_string(options, :links)
 
     get("/links?" <> params)
   end
@@ -122,7 +120,15 @@ defmodule Mse25.Directus do
 
   defp payload(%Req.Response{status: 401}), do: {:forbidden, "Invalid Directus credentials"}
 
-  defp query_params_string(params, options),
+  defp query_params_string(params, options, :events),
+    do:
+      params
+      |> upcoming?(options)
+      |> limit?(options)
+      |> page?(options)
+      |> Enum.join("&")
+
+  defp query_params_string(params, options, _),
     do:
       params
       |> limit?(options)
@@ -139,7 +145,14 @@ defmodule Mse25.Directus do
   defp page?(params, opts) do
     case opts[:page] do
       nil -> params
-      pg = _ -> ["page=" <> to_string(pg) | params]
+      pg -> ["page=" <> to_string(pg) | params]
+    end
+  end
+
+  defp upcoming?(params, opts) do
+    case opts[:upcoming] do
+      true -> ["filter[upcoming][_eq]=1" | params]
+      _ -> ["filter[upcoming][_eq]=0" | params]
     end
   end
 end
