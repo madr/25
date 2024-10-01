@@ -54,19 +54,23 @@ defmodule Mse25Web.ItemController do
       heading: heading,
       contents: Earmark.as_html!(contents),
       published_at: published_at,
-      updated_at: updated_at
+      updated_at: updated_at,
+      year: 2024
     ]
   end
 
   defp assigns(:event, %{
          "title" => heading,
          "contents" => contents,
-         "started_at" => published_at
+         "started_at" => published_at,
+         "lead" => lead
        }) do
     [
       heading: heading,
       contents: Earmark.as_html!(contents),
-      published_at: published_at
+      published_at: published_at,
+      lead: lead,
+      year: 2024
     ]
   end
 
