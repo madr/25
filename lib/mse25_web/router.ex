@@ -19,15 +19,15 @@ defmodule Mse25Web.Router do
 
     get "/", PageController, :home
 
-    # get "/evenemang", EventController, :index
-    # get "/kommande-evenemang.ics", EventController, :calendar
-    # get "/event-map.js", EventController, :interactive_map
-
+    get "/evenemang", PageController, :events
     get "/webblogg", PageController, :articles
     get "/delningar", PageController, :links
 
+    # get "/kommande-evenemang.ics", EventController, :calendar
+    # get "/event-map.js", EventController, :interactive_map
     # get "/:year", TimelineController, :annual
     # get "/prenumerera.xml", TimelineController, :feed
+
     get "/*path", ItemController, :index
   end
 
