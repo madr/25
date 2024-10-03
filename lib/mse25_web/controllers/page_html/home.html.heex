@@ -1,5 +1,9 @@
 <main class="landing">
   <img src={~p"/images/aey.svg"} width="300" alt="Anders Englöf Ytterström" />
+  <form metod="get" action="/search">
+    <label for="q">Sök innehåll</label>: <input size="9" type="search" id="q" name="q" />
+    <button>Sök</button>
+  </form>
   <div class="tree">
     <div>
       Senast skrivet (<date><%= @recent_article["pubDate"] %></date>):<br />
@@ -14,20 +18,20 @@
       </a>
     </div>
     <div>
-      <a href="/inlagg">Webbloggen</a>
+      <a href="/webblogg">Webbloggen</a>
     </div>
-    <%= for event <- @recent_event do %>
-      <div>
-        Deltog på: <a href={event["slug"]}><%= event["title"] %><br /><%= event["lead"] %></a>
-      </div>
-    <% end %>
     <%= for event <- @upcoming do %>
       <div>
         Kommande: <a href={event["slug"]}><%= event["title"] %><br /><%= event["lead"] %></a>
       </div>
     <% end %>
+    <%= for event <- @recent_event do %>
+      <div>
+        Upplevt: <a href={event["slug"]}><%= event["title"] %><br /><%= event["lead"] %></a>
+      </div>
+    <% end %>
     <div>
-      Tidslinjen: <a href="/inlagg">Evenemang</a>
+      <a href="/evenemang">Evenemangstidslinje</a>
     </div>
     <div>
       Värt att uppmärksamma:
@@ -35,6 +39,14 @@
         Delningar
       </a>
     </div>
+    <%= for legend <- @brutal_legends do %>
+      <div>
+        Införskaffat (<%= legend["purchased_at"] %>):<br />
+        <a href={legend["externalId"]}>
+          <%= legend["artist"] %> - <%= legend["album"] %> (<%= legend["year"] %>)
+        </a>
+      </div>
+    <% end %>
     <div>
       <a href="/vad-jag-gor">
         Vad jag gör
