@@ -59,7 +59,7 @@
           <article>
             <h3>
               <%= link["title"] %>
-              <a href={"/" <> link["slug"]} title="Permalänk">#</a>
+              <a class="permalink" href={"/" <> link["slug"]} title="Permalänk">#</a>
             </h3>
             <%= link["contents"] |> Earmark.as_html!() |> raw %>
             <div class="source">
