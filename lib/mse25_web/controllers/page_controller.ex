@@ -10,7 +10,7 @@ defmodule Mse25Web.PageController do
     brutal_legends = Directus.get_albums!(limit: 1)
 
     render(conn, :home,
-      page_title: "Anders Englöf Ytterström @ madr.se",
+      page_title: "Anders Englöf Ytterström",
       layout: false,
       recent_article: most_recent_article,
       older_article: older_article,
@@ -33,7 +33,7 @@ defmodule Mse25Web.PageController do
     links = Directus.get_links!(limit: 9999) |> group_by_date
 
     render(conn, :links,
-      page_title: "delningar",
+      page_title: "Delningar",
       links: links
     )
   end

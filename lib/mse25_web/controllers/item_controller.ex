@@ -51,6 +51,7 @@ defmodule Mse25Web.ItemController do
          "date_updated" => updated_at
        }) do
     [
+      page_title: heading,
       heading: heading,
       contents: Earmark.as_html!(contents),
       published_at: published_at,
@@ -70,6 +71,7 @@ defmodule Mse25Web.ItemController do
          "lead" => lead
        }) do
     [
+      page_title: heading,
       heading: heading,
       contents: Earmark.as_html!(contents),
       published_at: published_at,
@@ -87,6 +89,7 @@ defmodule Mse25Web.ItemController do
          "h1" => title
        }) do
     [
+      page_title: heading,
       heading: heading,
       contents: Earmark.as_html!(contents),
       published_at: published_at,
