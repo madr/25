@@ -21,11 +21,18 @@ defmodule Mse25Web.PageController do
   end
 
   def articles(conn, _params) do
-    articles = Directus.get_articles!(limit: 9999) |> group_annually
+    articles =
+      case conn.params do
+        %{"q" => query_string} -> Directus.get_articles!(limit: 9999, query: query_string)
+        _ -> Directus.get_articles!(limit: 9999)
+      end
+      |> group_annually
 
     render(conn, :articles,
       page_title: "Webblogg",
-      articles: articles
+      articles: articles,
+      q: conn.params["q"],
+      nosearch?: conn.params["q"] == nil or conn.params["q"] == ""
     )
   end
 

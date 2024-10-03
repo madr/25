@@ -9,7 +9,10 @@
   </ol>
   <h1>Webblogg</h1>
   <p>
-    Inlägg skrivna sedan 2006. Gå direkt till:
+    Inlägg skrivna sedan 2006.
+    <%= if @nosearch? do %>
+      Gå direkt till:
+    <% end %>
   </p>
   <ul class="months">
     <%= for {year, articles} <- @articles do %>
@@ -18,6 +21,16 @@
       </li>
     <% end %>
   </ul>
+  <form method="get" action="/webblogg">
+    <p>
+      <%= if @nosearch? do %>
+        Eller
+      <% end %>
+      <label for="q">sök innehåll</label>:
+      <input type="search" value={@q} name="q" id="q" size="7" />
+      <button>Sök</button>
+    </p>
+  </form>
   <%= for {year, articles} <- @articles do %>
     <section id={"y" <> year}>
       <h2 class="sticky"><%= year %></h2>
