@@ -42,9 +42,16 @@ defmodule Mse25.Directus do
   end
 
   def get_events!(options \\ []) do
+    [sorting, filter] =
+      case options[:upcoming] do
+        true -> ["started_at", "1"]
+        _ -> ["-started_at", "0"]
+      end
+
     params =
       [
-        "sort=-started_at",
+        "sort=" <> sorting,
+        "filter[upcoming][_eq]=" <> filter,
         "fields=" <>
           Enum.join(
             [
@@ -120,14 +127,6 @@ defmodule Mse25.Directus do
 
   defp payload(%Req.Response{status: 401}), do: {:forbidden, "Invalid Directus credentials"}
 
-  defp query_params_string(params, options, :events),
-    do:
-      params
-      |> upcoming?(options)
-      |> limit?(options)
-      |> page?(options)
-      |> Enum.join("&")
-
   defp query_params_string(params, options, _),
     do:
       params
@@ -146,13 +145,6 @@ defmodule Mse25.Directus do
     case opts[:page] do
       nil -> params
       pg -> ["page=" <> to_string(pg) | params]
-    end
-  end
-
-  defp upcoming?(params, opts) do
-    case opts[:upcoming] do
-      true -> ["filter[upcoming][_eq]=1" | params]
-      _ -> ["filter[upcoming][_eq]=0" | params]
     end
   end
 end
