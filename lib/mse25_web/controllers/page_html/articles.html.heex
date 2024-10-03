@@ -1,0 +1,36 @@
+<header>
+  <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a href="/" rel="home">
+        <span itemprop="name">madr.se</span>
+      </a>
+      <meta itemprop="position" content="1" />
+    </li>
+  </ol>
+  <h1>Webblogg</h1>
+  <p>
+    Inlägg skrivna sedan 2006. Gå direkt till:
+  </p>
+  <ul class="months">
+    <%= for {year, articles} <- @articles do %>
+      <li>
+        <a href={"#y" <> year}><%= year %></a> (<%= Enum.count(articles) %>)
+      </li>
+    <% end %>
+  </ul>
+  <%= for {year, articles} <- @articles do %>
+    <section id={"y" <> year}>
+      <h2 class="sticky"><%= year %></h2>
+      <div class="articles">
+        <%= for article <- articles do %>
+          <article>
+            <h2>
+              <a href={"/" <> article["slug"]}><%= article["title"] %></a>
+            </h2>
+            <date><%= article["pubDate"] %></date>
+          </article>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+</header>
