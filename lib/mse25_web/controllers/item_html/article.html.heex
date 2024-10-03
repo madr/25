@@ -1,12 +1,33 @@
-<article>
-<header>
-<date><%= @published_at %></date>
-<h1><%= @heading %></h1>
-</header>
+<article class="article">
+  <header>
+    <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" rel="home">
+          <span itemprop="name">madr.se</span>
+        </a>
+        <meta itemprop="position" content="1" />
+      </li>
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/webblogg">
+          <span itemprop="name">Webblogg</span>
+        </a>
+        <meta itemprop="position" content="2" />
+      </li>
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href={"/" <> @year}>
+          <span itemprop="name"><%= @year %></span>
+        </a>
+        <meta itemprop="position" content="3" />
+      </li>
+    </ol>
+    <h1><%= @heading %></h1>
+  </header>
 
-<%= raw @contents %>
+  <%= raw(@contents) %>
 
-<footer>
-<p>Skribent: Anders Englöf Ytterström. Publicerad <%= @published_at %> och senast uppdaterad <%= @updated_at %>.</p>
-</footer>
+  <footer>
+    <p>
+      Publicerad <%= @published_at %> <br />och senast uppdaterad <%= @updated_at %>
+    </p>
+  </footer>
 </article>
