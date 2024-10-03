@@ -50,17 +50,16 @@ defmodule Mse25Web.ItemController do
          "pubDate" => published_at,
          "date_updated" => updated_at
        }) do
-    updated =
-      case updated_at do
-        nil -> published_at
-        s -> String.slice(s, 0..9)
-      end
-
     [
+      page_title: heading,
       heading: heading,
       contents: Earmark.as_html!(contents),
       published_at: published_at,
-      updated_at: updated,
+      updated_at:
+        case updated_at do
+          nil -> published_at
+          ua -> String.slice(ua, 0..9)
+        end,
       year: String.slice(published_at, 0..3)
     ]
   end
@@ -72,11 +71,12 @@ defmodule Mse25Web.ItemController do
          "lead" => lead
        }) do
     [
+      page_title: heading,
       heading: heading,
       contents: Earmark.as_html!(contents),
       published_at: published_at,
       lead: lead,
-      year: 2024
+      year: String.slice(published_at, 0..3)
     ]
   end
 
@@ -84,15 +84,23 @@ defmodule Mse25Web.ItemController do
          "title" => heading,
          "contents" => contents,
          "pubDate" => published_at,
+         "date_updated" => updated_at,
          "source" => url,
          "h1" => title
        }) do
     [
+      page_title: heading,
       heading: heading,
       contents: Earmark.as_html!(contents),
       published_at: published_at,
       url: url,
-      title: title
+      title: title,
+      year: String.slice(published_at, 0..3),
+      updated_at:
+        case updated_at do
+          nil -> published_at
+          ua -> String.slice(ua, 0..9)
+        end
     ]
   end
 

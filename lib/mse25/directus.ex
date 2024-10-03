@@ -1,4 +1,6 @@
 defmodule Mse25.Directus do
+  @draft_filter "filter[status][_eq]=published"
+
   def get_article(slug) do
     get_item(:articles, slug)
   end
@@ -172,6 +174,12 @@ defmodule Mse25.Directus do
   defp get(resource) do
     [base_url: base_url, token: token] = Application.fetch_env!(:mse25, :directus)
     req = Req.new(base_url: base_url <> "/items")
+
+    resource =
+      case String.contains?(resource, "?") do
+        true -> resource <> "&" <> @draft_filter
+        false -> resource <> "?" <> @draft_filter
+      end
 
     case Req.get!(req, url: resource, auth: {:bearer, token})
          |> payload do

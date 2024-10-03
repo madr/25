@@ -44,6 +44,10 @@
 
 import "../app.css";
 
-import copyToClipboard from "./copy-to-clipboard.js";
+import {
+  copyCodeToClipboard,
+  copyUrlToClipboard,
+} from "./copy-to-clipboard.js";
 
-copyToClipboard();
+copyCodeToClipboard();
+copyUrlToClipboard();
