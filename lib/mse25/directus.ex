@@ -41,10 +41,65 @@ defmodule Mse25.Directus do
     )
   end
 
-  def get_events!(options \\ []) do
+  def get_albums!(options \\ []) do
     params =
       [
-        "sort=-started_at",
+        "sort=-purchased_at",
+        "fields=" <>
+          Enum.join(
+            [
+              "purchased_at",
+              "album",
+              "year",
+              "externalId",
+              "cover.filename_download",
+              "cover.width",
+              "cover.height",
+              "songs.title",
+              "songs.artist.name"
+            ],
+            ","
+          )
+      ]
+      |> query_params_string(options, :brutal_legends)
+
+    get("/albums?" <> params)
+    |> Enum.map(fn m = %{"songs" => [%{"artist" => %{"name" => a}} | _]} ->
+      Map.put(m, "artist", a)
+    end)
+  end
+
+  def get_album(externalId) do
+    get_item(
+      :albums,
+      externalId,
+      [
+        "purchased_at",
+        "album",
+        "year",
+        "youtubeId",
+        "externalId",
+        "cover.filename_download",
+        "cover.width",
+        "cover.height",
+        "songs.title",
+        "songs.artist.name"
+      ]
+      |> Enum.join(",")
+    )
+  end
+
+  def get_events!(options \\ []) do
+    [sorting, filter] =
+      case options[:upcoming] do
+        true -> ["started_at", "1"]
+        _ -> ["-started_at", "0"]
+      end
+
+    params =
+      [
+        "sort=" <> sorting,
+        "filter[upcoming][_eq]=" <> filter,
         "fields=" <>
           Enum.join(
             [
@@ -96,7 +151,16 @@ defmodule Mse25.Directus do
     get_item(:pages, slug)
   end
 
-  defp get_item(collection, slug, fields \\ "*") do
+  defp get_item(collection, externalId_or_slug, fields \\ "*")
+
+  defp get_item(:albums, externalId, fields) do
+    case get("/albums?fields=" <> fields <> "&filter[externalId][_eq]=" <> externalId) do
+      [] -> {:not_found, externalId}
+      [item | _] -> {:ok, item}
+    end
+  end
+
+  defp get_item(collection, slug, fields) do
     case get(
            "/" <> to_string(collection) <> "?fields=" <> fields <> "&filter[slug][_eq]=" <> slug
          ) do
@@ -120,14 +184,6 @@ defmodule Mse25.Directus do
 
   defp payload(%Req.Response{status: 401}), do: {:forbidden, "Invalid Directus credentials"}
 
-  defp query_params_string(params, options, :events),
-    do:
-      params
-      |> upcoming?(options)
-      |> limit?(options)
-      |> page?(options)
-      |> Enum.join("&")
-
   defp query_params_string(params, options, _),
     do:
       params
@@ -146,13 +202,6 @@ defmodule Mse25.Directus do
     case opts[:page] do
       nil -> params
       pg -> ["page=" <> to_string(pg) | params]
-    end
-  end
-
-  defp upcoming?(params, opts) do
-    case opts[:upcoming] do
-      true -> ["filter[upcoming][_eq]=1" | params]
-      _ -> ["filter[upcoming][_eq]=0" | params]
     end
   end
 end

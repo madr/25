@@ -7,6 +7,7 @@ defmodule Mse25Web.PageController do
     [most_recent_article, older_article] = Directus.get_articles!(limit: 2)
     recent_event = Directus.get_events!(limit: 1)
     upcoming_events = Directus.get_events!(limit: 1, upcoming: true)
+    brutal_legends = Directus.get_albums!(limit: 1)
 
     render(conn, :home,
       page_title: "Anders Englöf Ytterström @ madr.se",
@@ -14,7 +15,8 @@ defmodule Mse25Web.PageController do
       recent_article: most_recent_article,
       older_article: older_article,
       recent_event: recent_event,
-      upcoming: upcoming_events
+      upcoming: upcoming_events,
+      brutal_legends: brutal_legends
     )
   end
 
