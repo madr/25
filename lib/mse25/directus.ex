@@ -218,7 +218,7 @@ defmodule Mse25.Directus do
     case opts[:query] do
       nil -> params
       "" -> params
-      pg -> ["filter[contents][_icontains]=" <> to_string(pg) | params]
+      pg -> ["filter[title][_icontains]=" <> to_string(pg) | params]
     end
   end
 end
