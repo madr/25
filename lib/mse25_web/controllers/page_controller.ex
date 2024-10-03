@@ -17,4 +17,20 @@ defmodule Mse25Web.PageController do
       upcoming: upcoming_events
     )
   end
+
+  def articles(conn, _params) do
+    articles = Directus.get_articles!(limit: 9999) |> group_annually
+
+    render(conn, :articles,
+      page_title: "Webblogg",
+      articles: articles
+    )
+  end
+
+  defp group_annually(items) do
+    items
+    |> Enum.group_by(fn %{"slug" => slug} -> String.slice(slug, 0..3) end)
+    |> Map.to_list()
+    |> Enum.sort(fn {a, _a}, {b, _b} -> b < a end)
+  end
 end
