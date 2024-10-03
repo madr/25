@@ -1,7 +1,6 @@
 defmodule Mse25Web.PageController do
   use Mse25Web, :controller
 
-  alias Logger.Backends.Console
   alias Mse25.Directus
 
   def home(conn, _params) do
@@ -10,6 +9,7 @@ defmodule Mse25Web.PageController do
     upcoming_events = Directus.get_events!(limit: 1, upcoming: true)
 
     render(conn, :home,
+      page_title: "Anders Englöf Ytterström @ madr.se",
       layout: false,
       recent_article: most_recent_article,
       older_article: older_article,
