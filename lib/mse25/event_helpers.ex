@@ -1,4 +1,4 @@
-defmodule Mse25.Utils do
+defmodule Mse25.EventHelpers do
   def bandlist(bands) do
     bands
     |> Enum.map(fn b -> b["artists_id"]["name"] end)
