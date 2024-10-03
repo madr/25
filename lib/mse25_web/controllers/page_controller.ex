@@ -20,9 +20,9 @@ defmodule Mse25Web.PageController do
     )
   end
 
-  def articles(conn, _params) do
+  def articles(conn, params) do
     articles =
-      case conn.params do
+      case params do
         %{"q" => query_string} -> Directus.get_articles!(limit: 9999, query: query_string)
         _ -> Directus.get_articles!(limit: 9999)
       end
@@ -31,8 +31,27 @@ defmodule Mse25Web.PageController do
     render(conn, :articles,
       page_title: "Webblogg",
       articles: articles,
-      q: conn.params["q"],
-      nosearch?: conn.params["q"] == nil or conn.params["q"] == ""
+      q: params["q"],
+      nosearch?: params["q"] == nil or params["q"] == ""
+    )
+  end
+
+  def events(conn, params) do
+    {_, %{"title" => title, "contents" => contents}} = Directus.get_page("evenemang")
+
+    events =
+      case params do
+        %{"q" => query_string} -> Directus.get_events!(limit: 9999, query: query_string)
+        _ -> Directus.get_events!(limit: 9999)
+      end
+      |> group_annually
+
+    render(conn, :events,
+      page_title: title,
+      contents: Earmark.as_html!(contents),
+      events: events,
+      q: params["q"],
+      nosearch?: params["q"] == nil or params["q"] == ""
     )
   end
 
