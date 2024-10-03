@@ -118,27 +118,27 @@ main {
     font-size: large;
     box-sizing: border-box;
 
-    > pre {
-        margin: 2em 0;
-        background-color: #022;
-        overflow-y: auto;
-        padding: 0.33em;
-        box-shadow: 4px 4px 0 #333;
-        position: relative;
-        line-height: 1.2;
-        font-size: 0.8em;
-
-        > button {
-            position: absolute;
-            top: 0.25em;
-            right: 0.25em;
-        }
-    }
-
     > footer {
         font-style: italic;
         text-align: right;
         font-size: 0.8em;
+    }
+}
+
+pre {
+    margin: 2em 0;
+    background-color: #022;
+    overflow-y: auto;
+    padding: 0.33em;
+    box-shadow: 4px 4px 0 #333;
+    position: relative;
+    line-height: 1.2;
+    font-size: 0.8em;
+
+    > button {
+        position: absolute;
+        top: 0.25em;
+        right: 0.25em;
     }
 }
 
@@ -191,5 +191,11 @@ section > h2 {
     date {
         border-top: 1px solid crimson;
         padding: 0.25em 0.5em;
+    }
+}
+
+.links {
+    > :is(h2, h3) {
+        margin-top: 3em;
     }
 }
