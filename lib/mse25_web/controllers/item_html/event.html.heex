@@ -1,9 +1,45 @@
-<article>
-<header>
-<date><%= @published_at %></date>
-<h1><%= @heading %></h1>
-</header>
+<article class="article">
+  <header>
+    <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" rel="home">
+          <span itemprop="name">madr.se</span>
+        </a>
+        <meta itemprop="position" content="1" />
+      </li>
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/evenemang">
+          <span itemprop="name">Evenemang</span>
+        </a>
+        <meta itemprop="position" content="2" />
+      </li>
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href={"/" <> @year}>
+          <span itemprop="name"><%= @year %></span>
+        </a>
+        <meta itemprop="position" content="3" />
+      </li>
+    </ol>
+    <h1><%= @heading %></h1>
+  </header>
 
-<%= raw @contents %>
+  <ul>
+    <li><%= @lead %></li>
+    <%= if opening_acts?(%{"bands" => @bands, "category" => @category}) do %>
+      <li>Huvudakt: <%= @bands |> List.first() |> Map.get("artists_id") |> Map.get("name") %></li>
+      <li>Förband: <%= @bands |> Enum.drop(1) |> bandlist() %></li>
+    <% end %>
+    <%= if hilights?(%{"bands" => @bands, "category" => @category}) do %>
+      <li>Personliga höjdpunkter: <%= @bands |> bandlist() %></li>
+    <% end %>
+    <%= if missed?(%{"mia" => @mia, "category" => @category}) do %>
+      <li>Band jag missade: <%= @mia |> bandlist() %></li>
+    <% end %>
+  </ul>
 
+  <%= raw(@contents) %>
+
+  <%= if @poster do %>
+    <img src={"https://n.madr.se/assets/" <> @poster} alt="affisch" loading="lazy" />
+  <% end %>
 </article>

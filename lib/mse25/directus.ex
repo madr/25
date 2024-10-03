@@ -78,12 +78,9 @@ defmodule Mse25.Directus do
       [
         "*",
         "location.*",
-        "poster.filename_download",
-        "poster.width",
-        "poster.height",
+        "poster",
         "bands.artists_id.name",
-        "mia.artists_id.name",
-        "location.name"
+        "mia.artists_id.name"
       ]
       |> Enum.join(",")
     )

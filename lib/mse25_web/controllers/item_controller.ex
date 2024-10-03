@@ -67,16 +67,23 @@ defmodule Mse25Web.ItemController do
   defp assigns(:event, %{
          "title" => heading,
          "contents" => contents,
-         "started_at" => published_at,
-         "lead" => lead
+         "started_at" => started_at,
+         "lead" => lead,
+         "poster" => poster,
+         "bands" => bands,
+         "mia" => mia,
+         "category" => category
        }) do
     [
       page_title: heading,
       heading: heading,
       contents: Earmark.as_html!(contents),
-      published_at: published_at,
       lead: lead,
-      year: String.slice(published_at, 0..3)
+      year: String.slice(started_at, 0..3),
+      poster: poster,
+      bands: bands,
+      mia: mia,
+      category: category
     ]
   end
 
