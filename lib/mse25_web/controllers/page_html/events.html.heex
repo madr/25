@@ -41,21 +41,26 @@
               <a href={"/" <> event["slug"]}><%= event["title"] %></a>
             </h2>
             <p><%= event["lead"] %></p>
-            <%= if not Enum.empty?(event["bands"]) do %>
+            <%= if hilights?(event) do %>
               <p>
                 Personliga höjdpunkter: <%= bandlist(event["bands"]) %>
               </p>
             <% end %>
-            <%= if not Enum.empty?(event["mia"]) do %>
+            <%= if missed?(event) do %>
               <p>
                 Band jag missade: <%= bandlist(event["mia"]) %>
+              </p>
+            <% end %>
+            <%= if opening_acts?(event) do %>
+              <p>
+                Förband: <%= event["bands"] |> Enum.drop(1) |> bandlist() %>
               </p>
             <% end %>
             <%= if event["poster"] do %>
               <img
                 loading="lazy"
                 src={"https://n.madr.se/assets/" <> event["poster"]}
-                alt="poster image"
+                alt="affisch"
                 width="150"
               />
             <% end %>
