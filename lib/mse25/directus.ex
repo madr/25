@@ -197,6 +197,7 @@ defmodule Mse25.Directus do
       params
       |> limit?(options)
       |> page?(options)
+      |> query?(options)
       |> Enum.join("&")
 
   defp limit?(params, opts) do
@@ -210,6 +211,14 @@ defmodule Mse25.Directus do
     case opts[:page] do
       nil -> params
       pg -> ["page=" <> to_string(pg) | params]
+    end
+  end
+
+  defp query?(params, opts) do
+    case opts[:query] do
+      nil -> params
+      "" -> params
+      pg -> ["filter[title][_icontains]=" <> to_string(pg) | params]
     end
   end
 end
