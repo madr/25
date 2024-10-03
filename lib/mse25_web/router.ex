@@ -23,11 +23,9 @@ defmodule Mse25Web.Router do
     # get "/kommande-evenemang.ics", EventController, :calendar
     # get "/event-map.js", EventController, :interactive_map
 
-    # get "/webblogg", ArticleController, :index
-    # get "/webblogg/prenumerera.xml", ArticleController, :feed
+    get "/webblogg", PageController, :articles
 
     # get "/delningar", ShareController, :index
-    # get "/delningar/prenumerera.xml", ShareController, :feed
 
     # get "/:year", TimelineController, :annual
     # get "/prenumerera.xml", TimelineController, :feed
