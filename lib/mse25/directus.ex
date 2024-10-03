@@ -41,6 +41,54 @@ defmodule Mse25.Directus do
     )
   end
 
+  def get_albums!(options \\ []) do
+    params =
+      [
+        "sort=-purchased_at",
+        "fields=" <>
+          Enum.join(
+            [
+              "purchased_at",
+              "album",
+              "year",
+              "externalId",
+              "cover.filename_download",
+              "cover.width",
+              "cover.height",
+              "songs.title",
+              "songs.artist.name"
+            ],
+            ","
+          )
+      ]
+      |> query_params_string(options, :brutal_legends)
+
+    get("/albums?" <> params)
+    |> Enum.map(fn m = %{"songs" => [%{"artist" => %{"name" => a}} | _]} ->
+      Map.put(m, "artist", a)
+    end)
+  end
+
+  def get_album(externalId) do
+    get_item(
+      :albums,
+      externalId,
+      [
+        "purchased_at",
+        "album",
+        "year",
+        "youtubeId",
+        "externalId",
+        "cover.filename_download",
+        "cover.width",
+        "cover.height",
+        "songs.title",
+        "songs.artist.name"
+      ]
+      |> Enum.join(",")
+    )
+  end
+
   def get_events!(options \\ []) do
     [sorting, filter] =
       case options[:upcoming] do
@@ -103,7 +151,16 @@ defmodule Mse25.Directus do
     get_item(:pages, slug)
   end
 
-  defp get_item(collection, slug, fields \\ "*") do
+  defp get_item(collection, externalId_or_slug, fields \\ "*")
+
+  defp get_item(:albums, externalId, fields) do
+    case get("/albums?fields=" <> fields <> "&filter[externalId][_eq]=" <> externalId) do
+      [] -> {:not_found, externalId}
+      [item | _] -> {:ok, item}
+    end
+  end
+
+  defp get_item(collection, slug, fields) do
     case get(
            "/" <> to_string(collection) <> "?fields=" <> fields <> "&filter[slug][_eq]=" <> slug
          ) do
