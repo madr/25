@@ -29,9 +29,25 @@ defmodule Mse25Web.PageController do
     )
   end
 
+  def links(conn, _params) do
+    links = Directus.get_links!(limit: 9999) |> group_by_date
+
+    render(conn, :links,
+      page_title: "delningar",
+      links: links
+    )
+  end
+
   defp group_annually(items) do
     items
     |> Enum.group_by(fn %{"slug" => slug} -> String.slice(slug, 0..3) end)
+    |> Map.to_list()
+    |> Enum.sort(fn {a, _a}, {b, _b} -> b < a end)
+  end
+
+  defp group_by_date(items) do
+    items
+    |> Enum.group_by(fn %{"pubDate" => pub_date} -> pub_date end)
     |> Map.to_list()
     |> Enum.sort(fn {a, _a}, {b, _b} -> b < a end)
   end
