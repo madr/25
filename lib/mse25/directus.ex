@@ -25,19 +25,19 @@ defmodule Mse25.Directus do
     get("/articles?" <> params)
   end
 
-  def get_event(slug) do
+  def get_album(externalId) do
     get_item(
-      :events,
-      slug,
+      :albums,
+      externalId,
       [
-        "*",
-        "location.*",
-        "poster.filename_download",
-        "poster.width",
-        "poster.height",
-        "bands.artists_id.name",
-        "mia.artists_id.name",
-        "location.name"
+        "purchased_at",
+        "album",
+        "year",
+        "youtubeId",
+        "externalId",
+        "cover",
+        "songs.title",
+        "songs.artist.name"
       ]
       |> Enum.join(",")
     )
@@ -71,21 +71,19 @@ defmodule Mse25.Directus do
     end)
   end
 
-  def get_album(externalId) do
+  def get_event(slug) do
     get_item(
-      :albums,
-      externalId,
+      :events,
+      slug,
       [
-        "purchased_at",
-        "album",
-        "year",
-        "youtubeId",
-        "externalId",
-        "cover.filename_download",
-        "cover.width",
-        "cover.height",
-        "songs.title",
-        "songs.artist.name"
+        "*",
+        "location.*",
+        "poster.filename_download",
+        "poster.width",
+        "poster.height",
+        "bands.artists_id.name",
+        "mia.artists_id.name",
+        "location.name"
       ]
       |> Enum.join(",")
     )
@@ -108,9 +106,8 @@ defmodule Mse25.Directus do
               "title",
               "lead",
               "slug",
-              "poster.filename_download",
-              "poster.width",
-              "poster.height",
+              "poster",
+              "category",
               "bands.artists_id.name",
               "mia.artists_id.name"
             ],
@@ -218,7 +215,7 @@ defmodule Mse25.Directus do
     case opts[:query] do
       nil -> params
       "" -> params
-      pg -> ["filter[title][_icontains]=" <> to_string(pg) | params]
+      pg -> ["filter[title][_icontains]=" <> String.replace(to_string(pg), " ", "%20") | params]
     end
   end
 end
