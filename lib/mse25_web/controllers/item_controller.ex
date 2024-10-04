@@ -1,6 +1,7 @@
 defmodule Mse25Web.ItemController do
   use Mse25Web, :controller
   alias Mse25.Directus
+  alias Mse25.Timeline
 
   def index(conn, _params) do
     case conn.path_info |> fetch do
