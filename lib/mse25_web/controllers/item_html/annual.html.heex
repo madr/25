@@ -53,12 +53,14 @@
               </a>
             </h3>
             <p><%= item["lead"] %></p>
-            <img
-              src={ "https://n.madr.se/assets/" <> item["poster"] <> "?key=poster"}
-              loading="lazy"
-              alt="Affisch"
-              width="200"
-            />
+            <%= if item["poster"] do %>
+              <img
+                src={ "https://n.madr.se/assets/" <> item["poster"] <> "?key=poster"}
+                loading="lazy"
+                alt="Affisch"
+                width="200"
+              />
+            <% end %>
           <% end %>
           <%= if t == :links do %>
             <h3>
@@ -89,13 +91,15 @@
                 <li><%= song["artist"]["name"] <> " - " <> song["title"] %></li>
               <% end %>
             </ul>
-            <img
-              src={"https://n.madr.se/assets/" <> item["cover"] <> "?key=rectangular"}
-              alt="Skivomslag"
-              loading="lazy"
-              height="75"
-              width="75"
-            />
+            <%= if item["cover"] do %>
+              <img
+                src={"https://n.madr.se/assets/" <> item["cover"] <> "?key=rectangular"}
+                alt="Skivomslag"
+                loading="lazy"
+                height="75"
+                width="75"
+              />
+            <% end %>
           <% end %>
         </article>
       <% end %>
