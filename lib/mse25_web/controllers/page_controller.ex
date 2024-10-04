@@ -2,6 +2,7 @@ defmodule Mse25Web.PageController do
   use Mse25Web, :controller
 
   alias Mse25.Directus
+  alias Mse25.Timeline
 
   def home(conn, _params) do
     [most_recent_article, older_article] = Directus.get_articles!(limit: 2)
@@ -18,6 +19,30 @@ defmodule Mse25Web.PageController do
       upcoming: upcoming_events,
       brutal_legends: brutal_legends
     )
+  end
+
+  def search(conn, %{"q" => ""}) do
+    redirect(conn, to: ~p"/")
+  end
+
+  def search(conn, %{"q" => query}) do
+    {:ok, %{results: results, count: count}} = Timeline.search(query)
+
+    scount =
+      case count do
+        0 -> "Inga"
+        c -> to_string(c)
+      end
+
+    render(conn, :search,
+      q: query,
+      page_title: scount <> " sökresultat för \"" <> query <> "\"",
+      results: results
+    )
+  end
+
+  def search(conn, _params) do
+    redirect(conn, to: ~p"/")
   end
 
   def articles(conn, params) do
