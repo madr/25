@@ -31,12 +31,7 @@ defmodule Mse25.Directus do
       :albums,
       externalId,
       [
-        "purchased_at",
-        "album",
-        "year",
-        "youtubeId",
-        "externalId",
-        "cover",
+        "*",
         "songs.title",
         "songs.artist.name"
       ]
@@ -51,24 +46,19 @@ defmodule Mse25.Directus do
         "fields=" <>
           Enum.join(
             [
-              "purchased_at",
-              "album",
-              "year",
-              "externalId",
-              "cover.filename_download",
-              "cover.width",
-              "cover.height",
+              "*",
               "songs.title",
               "songs.artist.name"
             ],
             ","
           )
       ]
+      |> annual?(:albums, options)
       |> query_params_string(options, :brutal_legends)
 
     get("/albums?" <> params)
-    |> Enum.map(fn m = %{"songs" => [%{"artist" => %{"name" => a}} | _]} ->
-      Map.put(m, "artist", a)
+    |> Enum.map(fn m = %{"songs" => [%{"artist" => %{"name" => a}} | _], "purchased_at" => pa} ->
+      m |> Map.put("artist", a) |> Map.put("purchase_year", String.slice(pa, 0..3))
     end)
   end
 
