@@ -34,6 +34,17 @@ defmodule Mse25Web.ItemController do
     end
   end
 
+  defp fetch([_year, album_id], :album) do
+    case Directus.get_album(album_id) do
+      {:ok, response} -> {:ok, :album, response}
+      not_found -> not_found
+    end
+  end
+
+  defp fetch([year, "brutal-legend-" <> external_id]) do
+    fetch([year, external_id], :album)
+  end
+
   defp fetch([year, slug]) do
     fetch([year, slug], :article)
   end
@@ -145,6 +156,28 @@ defmodule Mse25Web.ItemController do
       heading: heading,
       contents: Earmark.as_html!(contents),
       updated_at: String.slice(updated_at, 0..9)
+    ]
+  end
+
+  defp assigns(:album, %{
+         "year" => year,
+         "album" => album,
+         "contents" => contents,
+         "cover" => cover,
+         "purchased_at" => purchased_at,
+         "externalId" => count,
+         "songs" => songs
+       }) do
+    [
+      count: count,
+      page_title: album,
+      album: album,
+      cover: cover,
+      year: to_string(year),
+      purchase_year: String.slice(purchased_at, 0..3),
+      contents: Earmark.as_html!(contents),
+      songs: Enum.map(songs, fn %{"title" => name} -> "\"" <> name <> "\"" end),
+      artist: List.first(songs) |> Map.get("artist") |> Map.get("name")
     ]
   end
 end
