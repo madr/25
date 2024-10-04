@@ -1,6 +1,7 @@
 defmodule Mse25Web.ItemController do
   use Mse25Web, :controller
   alias Mse25.Directus
+  alias Mse25.Timeline
 
   def index(conn, _params) do
     case conn.path_info |> fetch do
@@ -38,11 +39,35 @@ defmodule Mse25Web.ItemController do
   end
 
   defp fetch([slug]) do
-    case Directus.get_page(slug) do
-      {:ok, response} -> {:ok, :page, response}
-      not_found -> not_found
+    case Integer.parse(slug) do
+      {:error} ->
+        case Directus.get_page(slug) do
+          {:ok, response} -> {:ok, :page, response}
+          error -> error
+        end
+
+      {year, _} ->
+        case Timeline.annual(year) do
+          {:ok, response} -> {:ok, :annual, response}
+          error -> error
+        end
     end
   end
+
+  defp assigns(:annual, %{
+         timeline: timeline,
+         year: year,
+         counts: counts
+       }),
+       do: [
+         year: year,
+         page_title: "Innehåll från " <> to_string(year),
+         timeline: timeline,
+         brutal_legends_count: Map.get(counts, :albums, 0),
+         article_count: Map.get(counts, :articles, 0),
+         event_count: Map.get(counts, :events, 0),
+         link_count: Map.get(counts, :links, 0)
+       ]
 
   defp assigns(:article, %{
          "title" => heading,
