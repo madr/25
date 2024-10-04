@@ -42,7 +42,7 @@
     <%= for legend <- @brutal_legends do %>
       <div>
         Införskaffat (<%= legend["purchased_at"] %>):<br />
-        <a href={legend["externalId"]}>
+        <a href={"/" <> legend["purchase_year"] <> "/brutal-legend-" <> legend["externalId"]}>
           <%= legend["artist"] %> - <%= legend["album"] %> (<%= legend["year"] %>)
         </a>
       </div>
