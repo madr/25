@@ -1,0 +1,40 @@
+<article class="article">
+  <header>
+    <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" rel="home">
+          <span itemprop="name">madr.se</span>
+        </a>
+        <meta itemprop="position" content="1" />
+      </li>
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href={"/" <> @purchase_year}>
+          <span itemprop="name"><%= @purchase_year %></span>
+        </a>
+        <meta itemprop="position" content="2" />
+      </li>
+    </ol>
+    <h1><%= @artist <> " - " <> @album <> " (" <> @year <> ")" %></h1>
+  </header>
+
+  <p>
+    Som jag tidigare skrivit om har jag ett roligt projekt pågående: att äga alla låtar i spelet Brütal Legend äldre än 1990 på vinyl, där det är möjligt.
+  </p>
+
+  <div class="brutal-legend">
+    <p>
+      #<%= @count %>: <%= @artist %> - <%= csl(@songs) %>, från <%= @album %> (<%= @year %>)
+    </p>
+    <%= if @cover do %>
+      <img
+        src={"https://n.madr.se/assets/" <> @cover <> "?key=rectangular"}
+        alt="Skivomslag"
+        loading="lazy"
+        height="75"
+        width="75"
+      />
+    <% end %>
+  </div>
+
+  <%= raw(@contents) %>
+</article>
