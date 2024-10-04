@@ -20,6 +20,7 @@ defmodule Mse25.Directus do
             ","
           )
       ]
+      |> annual?(:articles, options)
       |> query_params_string(options, :articles)
 
     get("/articles?" <> params)
@@ -105,12 +106,15 @@ defmodule Mse25.Directus do
               "slug",
               "poster",
               "category",
+              "started_at",
+              "ended_at",
               "bands.artists_id.name",
               "mia.artists_id.name"
             ],
             ","
           )
       ]
+      |> annual?(:events, options)
       |> query_params_string(options, :events)
 
     get("/events?" <> params)
@@ -138,6 +142,7 @@ defmodule Mse25.Directus do
             ","
           )
       ]
+      |> annual?(:links, options)
       |> query_params_string(options, :links)
 
     get("/links?" <> params)
@@ -215,4 +220,42 @@ defmodule Mse25.Directus do
       pg -> ["filter[title][_icontains]=" <> String.replace(to_string(pg), " ", "%20") | params]
     end
   end
+
+  defp annual?(params, type, opts) do
+    case opts[:year] do
+      nil ->
+        params
+
+      year ->
+        year_filter(type, year, params)
+    end
+  end
+
+  defp year_filter(:albums, year, params),
+    do: [
+      "filter[purchased_at][_gte]=" <> to_string(year) <> "-01-01",
+      "filter[purchased_at][_lte]=" <> to_string(year) <> "-12-31"
+      | params
+    ]
+
+  defp year_filter(:articles, year, params),
+    do: [
+      "filter[pubDate][_gte]=" <> to_string(year) <> "-01-01",
+      "filter[pubDate][_lte]=" <> to_string(year) <> "-12-31"
+      | params
+    ]
+
+  defp year_filter(:events, year, params),
+    do: [
+      "filter[started_at][_gte]=" <> to_string(year) <> "-01-01",
+      "filter[ended_at][_lte]=" <> to_string(year) <> "-12-31"
+      | params
+    ]
+
+  defp year_filter(:links, year, params),
+    do: [
+      "filter[pubDate][_gte]=" <> to_string(year) <> "-01-01",
+      "filter[pubDate][_lte]=" <> to_string(year) <> "-12-31"
+      | params
+    ]
 end
