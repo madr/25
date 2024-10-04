@@ -25,7 +25,6 @@ defmodule Mse25Web.Router do
 
     # get "/kommande-evenemang.ics", EventController, :calendar
     # get "/event-map.js", EventController, :interactive_map
-    # get "/:year", TimelineController, :annual
     # get "/prenumerera.xml", TimelineController, :feed
 
     get "/*path", ItemController, :index
