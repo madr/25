@@ -44,6 +44,16 @@ defmodule Mse25.Timeline do
         Task.async(fn -> Directus.get_links!(limit: 9999, query: query) end),
         Task.async(fn -> Directus.get_events!(limit: 9999, query: query) end)
       ])
+
+    results =
+      items
+      |> List.flatten()
+      |> Enum.sort_by(&sort_key/1)
+      |> Enum.map(&categorize/1)
+      # |> Enum.group_by(fn item -> sort_key(item) |> String.slice(5..6) end)
+      |> Enum.reverse()
+
+    {:ok, %{query: query, results: results, count: length(results)}}
   end
 
   defp sort_key(%{"pubDate" => date}), do: date

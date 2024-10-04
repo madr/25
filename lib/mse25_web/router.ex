@@ -18,10 +18,10 @@ defmodule Mse25Web.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-
     get "/evenemang", PageController, :events
     get "/webblogg", PageController, :articles
     get "/delningar", PageController, :links
+    get "/sok", PageController, :search
 
     # get "/kommande-evenemang.ics", EventController, :calendar
     # get "/event-map.js", EventController, :interactive_map
