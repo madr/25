@@ -11,23 +11,31 @@ defmodule Mse25Web.FeedController do
     :tbw
   end
 
-  def albums_json(conn, _params) do
+  def albums_json(conn, _) do
     json(
       conn,
       Directus.get_albums!()
-      |> Enum.map(fn a ->
-        {img, ""} = Integer.parse(a["externalId"])
+      |> Enum.map(fn %{
+                       "album" => album,
+                       "artist" => artist,
+                       "externalId" => id,
+                       "year" => year,
+                       "purchased_at" => purchased_on,
+                       "contents" => contents,
+                       "songs" => songs
+                     } ->
+        {img, ""} = Integer.parse(id)
 
         %{
-          id: a["externalId"],
+          id: id,
           img: to_string(img - 1) <> ".jpg",
-          title: a["album"],
-          artist: a["artist"],
-          album: a["album"],
-          year: a["year"],
-          purchased_on: a["purchased_at"],
-          description: Earmark.as_html!(a["contents"]),
-          songs: Enum.map(a["songs"], fn %{"title" => song} -> song end)
+          title: album,
+          artist: artist,
+          album: album,
+          year: year,
+          purchased_on: purchased_on,
+          description: Earmark.as_html!(contents),
+          songs: Enum.map(songs, fn %{"title" => song} -> song end)
         }
       end)
     )
