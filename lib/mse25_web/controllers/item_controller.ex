@@ -51,7 +51,7 @@ defmodule Mse25Web.ItemController do
 
   defp fetch([slug]) do
     case Integer.parse(slug) do
-      {:error} ->
+      :error ->
         case Directus.get_page(slug) do
           {:ok, response} -> {:ok, :page, response}
           error -> error
