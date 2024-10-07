@@ -4,6 +4,8 @@ defmodule Mse25Web.PageController do
   alias Mse25.Directus
   alias Mse25.Timeline
 
+  @almost_infinity 9999
+
   def home(conn, _params) do
     [most_recent_article, older_article] = Directus.get_articles!(limit: 2)
     recent_event = Directus.get_events!(limit: 1)
@@ -48,8 +50,11 @@ defmodule Mse25Web.PageController do
   def articles(conn, params) do
     articles =
       case params do
-        %{"q" => query_string} -> Directus.get_articles!(limit: 9999, query: query_string)
-        _ -> Directus.get_articles!(limit: 9999)
+        %{"q" => query_string} ->
+          Directus.get_articles!(limit: @almost_infinity, query: query_string)
+
+        _ ->
+          Directus.get_articles!(limit: @almost_infinity)
       end
       |> group_annually
 
@@ -66,8 +71,11 @@ defmodule Mse25Web.PageController do
 
     events =
       case params do
-        %{"q" => query_string} -> Directus.get_events!(limit: 9999, query: query_string)
-        _ -> Directus.get_events!(limit: 9999)
+        %{"q" => query_string} ->
+          Directus.get_events!(limit: @almost_infinity, query: query_string)
+
+        _ ->
+          Directus.get_events!(limit: @almost_infinity)
       end
       |> group_annually
 
@@ -81,7 +89,7 @@ defmodule Mse25Web.PageController do
   end
 
   def links(conn, _params) do
-    links = Directus.get_links!(limit: 9999) |> group_by_date
+    links = Directus.get_links!(limit: @almost_infinity) |> group_by_date
 
     render(conn, :links,
       page_title: "Delningar",

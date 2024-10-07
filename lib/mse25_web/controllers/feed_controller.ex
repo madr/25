@@ -2,16 +2,52 @@ defmodule Mse25Web.FeedController do
   use Mse25Web, :controller
   alias Mse25.Directus
   alias Mse25.Timeline
+  plug :put_layout, false
 
-  def atom_feed() do
-    :tbw
+  def feed(conn, _params) do
+    {:ok, %{archive: items}} = Timeline.archive(20)
+
+    text(
+      conn |> put_resp_content_type("application/rss+xml"),
+      items
+      |> Mse25Web.FeedView.rss(conn.host)
+    )
   end
 
-  def upcoming_events_ics() do
-    :tbw
+  def calendar(conn, _) do
+    text(
+      conn |> put_resp_content_type("text/calendar"),
+      Directus.get_events!(upcoming: true, limit: 9999)
+      |> Enum.map(fn %{
+                       "title" => title,
+                       "lead" => lead,
+                       "started_at" => starts_at,
+                       "ended_at" => ends_at,
+                       "location" => %{
+                         "name" => venue,
+                         "address" => region,
+                         "position" => %{
+                           "coordinates" => [lat, lng]
+                         }
+                       }
+                     } ->
+        %{
+          title: title,
+          lead: lead,
+          region: region,
+          venue: venue,
+          latitude: lat,
+          longitude: lng,
+          all_day?: true,
+          starts_at: String.replace(starts_at, "-", ""),
+          ends_at: String.replace(ends_at, "-", "")
+        }
+      end)
+      |> Mse25Web.FeedView.calendar()
+    )
   end
 
-  def albums_json(conn, _) do
+  def albums(conn, _) do
     json(
       conn,
       Directus.get_albums!()
@@ -41,7 +77,7 @@ defmodule Mse25Web.FeedController do
     )
   end
 
-  def events_json(conn, _) do
+  def events(conn, _) do
     json(
       conn,
       Directus.get_events!(limit: 9999)
@@ -73,7 +109,31 @@ defmodule Mse25Web.FeedController do
     )
   end
 
-  def event_map_js() do
-    :tbw
+  def interactive_event_map(conn, _) do
+    text(
+      conn |> put_resp_content_type("text/javascript"),
+      Directus.get_events!(limit: 9999)
+      |> Enum.map(fn %{
+                       "title" => title,
+                       "started_at" => date,
+                       "location" => %{
+                         "name" => venue,
+                         "address" => region,
+                         "position" => %{
+                           "coordinates" => [lat, lng]
+                         }
+                       }
+                     } ->
+        %{
+          title: title,
+          date: String.slice(date, 0..9),
+          region: region,
+          venue: venue,
+          longitude: lng,
+          latitude: lat
+        }
+      end)
+      |> Mse25Web.FeedView.event_map()
+    )
   end
 end
