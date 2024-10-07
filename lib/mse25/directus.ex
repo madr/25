@@ -1,4 +1,19 @@
 defmodule Mse25.Directus do
+  """
+  Simple Directus client, utilizing Req to do CRUD
+  operations.
+
+  Currently, this client only read data, and supports
+  various ways of filtering data.
+
+  It is by no means generic, since fieldsets are not
+  agnostic. It may however be used as a base to create
+  a more generic client implementation in Elixir.
+
+  Directus documentation:
+  https://docs.directus.io/
+  """
+
   @draft_filter "filter[status][_eq]=published"
 
   def get_article(slug) do
@@ -15,7 +30,8 @@ defmodule Mse25.Directus do
               "slug",
               "title",
               "date_updated",
-              "pubDate"
+              "pubDate",
+              "contents"
             ],
             ","
           )
@@ -57,9 +73,22 @@ defmodule Mse25.Directus do
       |> query_params_string(options, :brutal_legends)
 
     get("/albums?" <> params)
-    |> Enum.map(fn m = %{"songs" => [%{"artist" => %{"name" => a}} | _], "purchased_at" => pa} ->
-      m |> Map.put("artist", a) |> Map.put("purchase_year", String.slice(pa, 0..3))
-    end)
+    |> Enum.map(
+      fn m = %{
+           "album" => album,
+           "year" => year,
+           "songs" => [%{"artist" => %{"name" => artist}} | _],
+           "purchased_at" => purchased_at
+         } ->
+        m
+        |> Map.put("artist", artist)
+        |> Map.put(
+          "purchase_year",
+          String.slice(purchased_at, 0..3)
+        )
+        |> Map.put("summary", "#{artist} - #{album} (#{to_string(year)})")
+      end
+    )
   end
 
   def get_event(slug) do
@@ -98,6 +127,7 @@ defmodule Mse25.Directus do
               "category",
               "started_at",
               "ended_at",
+              "contents",
               "bands.artists_id.name",
               "mia.artists_id.name",
               "location.*"
