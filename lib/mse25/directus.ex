@@ -1,5 +1,5 @@
 defmodule Mse25.Directus do
-  """
+  @moduledoc """
   Simple Directus client, utilizing Req to do CRUD
   operations.
 

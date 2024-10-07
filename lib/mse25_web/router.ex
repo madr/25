@@ -9,8 +9,19 @@ defmodule Mse25Web.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :scripts do
+    plug :accepts, ["js"]
+    plug :put_secure_browser_headers
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  scope "/", Mse25Web do
+    pipe_through :scripts
+
+    get "/event-map.js", FeedController, :interactive_event_map
   end
 
   scope "/", Mse25Web do
@@ -23,7 +34,6 @@ defmodule Mse25Web.Router do
     get "/sok", PageController, :search
 
     get "/prenumerera.xml", FeedController, :feed
-    get "/event-map.js", FeedController, :interactive_event_map
     get "/albums.json", FeedController, :albums
     get "/events.json", FeedController, :events
     get "/kommande-evenemang.ics", FeedController, :calendar

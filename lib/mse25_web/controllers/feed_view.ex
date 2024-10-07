@@ -48,16 +48,13 @@ defmodule Mse25Web.FeedView do
       const mapData = [
         #{markers |> Enum.map(fn %{date: date, latitude: latitude, longitude: longitude, title: title, region: region, venue: venue} -> ~s"""
       {
-          location: [
-              #{latitude},
-              #{longitude}
-          ],
+          location: [#{longitude}, #{latitude}],
           title: "#{title}",
           date: "#{date}",
           region: "#{region}",
           venue: "#{venue}"
       }
-      """ end) |> Enum.join("")}
+      """ end) |> Enum.join(",")}
       ]
 
       // insert Leaflet styles (<link>) to <head> and <script> to
@@ -173,7 +170,7 @@ defmodule Mse25Web.FeedView do
       <title>#{title}</title>
       <link>https://madr.se/#{slug}</link>
       <description>
-        <![CDATA[#{Earmark.as_html!(contents) |> }]]>
+        <![CDATA[#{Earmark.as_html!(contents)}]]>
       </description>
       <pubDate>#{format_rfc822(date)}</pubDate>
       <guid>https://madr.se/#{slug}</guid>

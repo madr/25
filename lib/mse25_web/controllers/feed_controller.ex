@@ -112,11 +112,9 @@ defmodule Mse25Web.FeedController do
   def interactive_event_map(conn, _) do
     text(
       conn |> put_resp_content_type("text/javascript"),
-      Directus.get_events!(upcoming: true, limit: 9999)
+      Directus.get_events!(limit: 9999)
       |> Enum.map(fn %{
                        "title" => title,
-                       "lead" => lead,
-                       "poster" => img,
                        "started_at" => date,
                        "location" => %{
                          "name" => venue,
