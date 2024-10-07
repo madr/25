@@ -26,13 +26,6 @@ defmodule Mse25Web do
       # Import common connection and controller functions to use in pipelines
       import Plug.Conn
       import Phoenix.Controller
-      import Phoenix.LiveView.Router
-    end
-  end
-
-  def channel do
-    quote do
-      use Phoenix.Channel
     end
   end
 
@@ -46,23 +39,6 @@ defmodule Mse25Web do
       import Mse25Web.Gettext
 
       unquote(verified_routes())
-    end
-  end
-
-  def live_view do
-    quote do
-      use Phoenix.LiveView,
-        layout: {Mse25Web.Layouts, :app}
-
-      unquote(html_helpers())
-    end
-  end
-
-  def live_component do
-    quote do
-      use Phoenix.LiveComponent
-
-      unquote(html_helpers())
     end
   end
 
@@ -81,16 +57,10 @@ defmodule Mse25Web do
 
   defp html_helpers do
     quote do
-      # HTML escaping functionality
       import Phoenix.HTML
-      # Core UI components and translation
       import Mse25Web.CoreComponents
       import Mse25Web.Gettext
 
-      # Shortcut for generating JS commands
-      alias Phoenix.LiveView.JS
-
-      # Routes generation with the ~p sigil
       unquote(verified_routes())
     end
   end
