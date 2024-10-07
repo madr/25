@@ -1,23 +1,35 @@
 defmodule Mse25.Timeline do
   alias Mse25.Directus
 
-  def archive() do
+  @almost_infinity 9999
+
+  def archive(limit \\ @almost_infinity) do
     items =
       Task.await_many([
         Task.async(fn -> Directus.get_albums!() end),
-        Task.async(fn -> Directus.get_articles!(limit: 9999) end),
-        Task.async(fn -> Directus.get_links!(limit: 9999) end),
-        Task.async(fn -> Directus.get_events!(limit: 9999) end)
+        Task.async(fn -> Directus.get_articles!(limit: limit) end),
+        Task.async(fn -> Directus.get_links!(limit: limit) end),
+        Task.async(fn -> Directus.get_events!(limit: limit) end)
       ])
+
+    archive =
+      items
+      |> List.flatten()
+      |> Enum.sort_by(&sort_key/1)
+      |> Enum.reverse()
+      |> Enum.take(limit)
+      |> Enum.map(&categorize/1)
+
+    {:ok, %{archive: archive}}
   end
 
   def annual(year) do
     items =
       Task.await_many([
-        Task.async(fn -> Directus.get_albums!(limit: 9999, year: year) end),
-        Task.async(fn -> Directus.get_articles!(limit: 9999, year: year) end),
-        Task.async(fn -> Directus.get_links!(limit: 9999, year: year) end),
-        Task.async(fn -> Directus.get_events!(limit: 9999, year: year) end)
+        Task.async(fn -> Directus.get_albums!(limit: @almost_infinity, year: year) end),
+        Task.async(fn -> Directus.get_articles!(limit: @almost_infinity, year: year) end),
+        Task.async(fn -> Directus.get_links!(limit: @almost_infinity, year: year) end),
+        Task.async(fn -> Directus.get_events!(limit: @almost_infinity, year: year) end)
       ])
 
     counts =
@@ -40,9 +52,9 @@ defmodule Mse25.Timeline do
   def search(query) do
     items =
       Task.await_many([
-        Task.async(fn -> Directus.get_articles!(limit: 9999, query: query) end),
-        Task.async(fn -> Directus.get_links!(limit: 9999, query: query) end),
-        Task.async(fn -> Directus.get_events!(limit: 9999, query: query) end)
+        Task.async(fn -> Directus.get_articles!(limit: @almost_infinity, query: query) end),
+        Task.async(fn -> Directus.get_links!(limit: @almost_infinity, query: query) end),
+        Task.async(fn -> Directus.get_events!(limit: @almost_infinity, query: query) end)
       ])
 
     results =
