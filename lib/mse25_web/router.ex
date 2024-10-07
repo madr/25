@@ -22,11 +22,11 @@ defmodule Mse25Web.Router do
     get "/delningar", PageController, :links
     get "/sok", PageController, :search
 
-    # get "/kommande-evenemang.ics", EventController, :calendar
-    # get "/event-map.js", EventController, :interactive_map
-    # get "/prenumerera.xml", TimelineController, :feed
-    get "/albums.json", FeedController, :albums_json
-    get "/events.json", FeedController, :events_json
+    get "/prenumerera.xml", FeedController, :feed
+    get "/event-map.js", FeedController, :interactive_event_map
+    get "/albums.json", FeedController, :albums
+    get "/events.json", FeedController, :events
+    get "/kommande-evenemang.ics", FeedController, :calendar
 
     get "/*path", ItemController, :index
   end
