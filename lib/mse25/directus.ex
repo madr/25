@@ -99,7 +99,8 @@ defmodule Mse25.Directus do
               "started_at",
               "ended_at",
               "bands.artists_id.name",
-              "mia.artists_id.name"
+              "mia.artists_id.name",
+              "location.*"
             ],
             ","
           )
