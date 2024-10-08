@@ -40,7 +40,7 @@ defmodule Mse25Web.FeedView do
     DTSTART:20000630T000000
     END:STANDARD
     END:VTIMEZONE
-    #{upcoming |> Enum.map(fn %{id: id, title: title, updated_at: updated_at, created_at: created_at, starts_at: starts_at, ends_at: ends_at, longitude: longitude, latitude: latitude, lead: lead, venue: venue, region: region} -> ~s"""
+    #{upcoming |> Enum.map(fn %{id: id, title: title, created_at: created_at, starts_at: starts_at, ends_at: ends_at, longitude: longitude, latitude: latitude, lead: lead, venue: venue, region: region} -> ~s"""
       BEGIN:VEVENT
       UID:#{starts_at}.#{id}@madr.se
       DTSTAMP:#{created_at}

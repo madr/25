@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <title><%= assigns[:page_title] || "Anders Englöf Ytterström" %> | madr.se</title>
+    <title><%= assigns.page_title || "Anders Englöf Ytterström" %> | madr.se</title>
     <link rel="stylesheet" href={~p"/assets/app.css"} />
     <link
       href="/prenumerera.xml"
@@ -12,8 +12,10 @@
       rel="alternate"
       title="madr.se: inlägg, evenemang, delningar"
     />
+    <%= canonical(assigns) |> raw %>
+    <%= opengraph(assigns) |> raw %>
   </head>
-  <body class="bg-white">
+  <body>
     <%= @inner_content %>
     <script src={~p"/assets/app.js"}>
     </script>
