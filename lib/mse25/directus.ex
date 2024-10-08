@@ -120,6 +120,7 @@ defmodule Mse25.Directus do
         "fields=" <>
           Enum.join(
             [
+              "id",
               "title",
               "lead",
               "slug",
@@ -128,6 +129,7 @@ defmodule Mse25.Directus do
               "started_at",
               "ended_at",
               "contents",
+              "date_created",
               "bands.artists_id.name",
               "mia.artists_id.name",
               "location.*"

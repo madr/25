@@ -23,14 +23,31 @@ defmodule Mse25Web.FeedView do
     ~s"""
     BEGIN:VCALENDAR
     VERSION:2.0
-    PRODID:-//https://madr.se//kommande-evenemang
+    PRODID:-//https://madr.se//kommande-evenemang.ics//SE
+    CALSCALE:GREGORIAN
+    X-ORIGINAL-URL:https://madr.se
+    X-WR-CALDESC: Kommande evenemang, madr.se
     METHOD:PUBLISH
-    #{upcoming |> Enum.map(fn %{title: title, starts_at: starts_at, ends_at: ends_at, longitude: longitude, latitude: latitude, lead: lead, venue: venue, region: region} -> ~s"""
+    REFRESH-INTERVAL;VALUE=DURATION:PT1H
+    X-Robots-Tag:noindex
+    X-PUBLISHED-TTL:PT1H
+    BEGIN:VTIMEZONE
+    TZID:CEST
+    BEGIN:STANDARD
+    TZOFFSETFROM:+0200
+    TZOFFSETTO:+0200
+    TZNAME:CEST
+    DTSTART:20000630T000000
+    END:STANDARD
+    END:VTIMEZONE
+    #{upcoming |> Enum.map(fn %{id: id, title: title, updated_at: updated_at, created_at: created_at, starts_at: starts_at, ends_at: ends_at, longitude: longitude, latitude: latitude, lead: lead, venue: venue, region: region} -> ~s"""
       BEGIN:VEVENT
-      UID:#{title}.#{starts_at}@madr.se
-      DTSTAMP:#{starts_at}T000000
-      DTSTART;VALUE=DATE:#{starts_at}
-      DTEND;VALUE=DATE:#{ends_at}
+      UID:#{starts_at}.#{id}@madr.se
+      DTSTAMP:#{created_at}
+      CREATED:#{created_at}
+      LAST-MODIFIED:#{created_at}
+      DTSTART;TZID=CEST:#{starts_at}T060606
+      DTEND;TZID=CEST:#{ends_at}T060606
       SUMMARY:#{title}
       DESCRIPTION:#{lead}
       LOCATION:#{venue}\, #{region}

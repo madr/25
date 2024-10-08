@@ -19,10 +19,12 @@ defmodule Mse25Web.FeedController do
       conn |> put_resp_content_type("text/calendar"),
       Directus.get_events!(upcoming: true, limit: 9999)
       |> Enum.map(fn %{
+                       "id" => id,
                        "title" => title,
                        "lead" => lead,
                        "started_at" => starts_at,
                        "ended_at" => ends_at,
+                       "date_created" => created_at,
                        "location" => %{
                          "name" => venue,
                          "address" => region,
@@ -32,6 +34,7 @@ defmodule Mse25Web.FeedController do
                        }
                      } ->
         %{
+          id: id,
           title: title,
           lead: lead,
           region: region,
@@ -39,6 +42,8 @@ defmodule Mse25Web.FeedController do
           latitude: lat,
           longitude: lng,
           all_day?: true,
+          updated_at: created_at |> String.slice(0..18) |> String.replace(~r/[-:]/, ""),
+          created_at: created_at |> String.slice(0..18) |> String.replace(~r/[-:]/, ""),
           starts_at: String.replace(starts_at, "-", ""),
           ends_at: String.replace(ends_at, "-", "")
         }
