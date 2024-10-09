@@ -59,7 +59,7 @@ defmodule Mse25Web.Layouts do
             """
         end
 
-      {_} ->
+      {_i, _d} ->
         ~s"""
         <meta name="robots" content="noindex,follow" />
         """
