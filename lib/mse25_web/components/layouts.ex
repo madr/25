@@ -45,7 +45,7 @@ defmodule Mse25Web.Layouts do
   end
 
   def robots(%{conn: %{path_info: [first | []]}}) do
-    case String.to_integer(first) do
+    case Integer.parse(first) do
       :error ->
         case Enum.member?(@list_views, first) do
           true ->
@@ -59,7 +59,7 @@ defmodule Mse25Web.Layouts do
             """
         end
 
-      _ ->
+      {_} ->
         ~s"""
         <meta name="robots" content="noindex,follow" />
         """

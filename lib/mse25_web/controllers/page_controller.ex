@@ -48,19 +48,19 @@ defmodule Mse25Web.PageController do
   end
 
   def articles(conn, params) do
-    articles =
+    {articles, page_title} =
       case params do
         %{"q" => query_string} ->
-          Directus.get_articles!(limit: @almost_infinity, query: query_string)
+          {Directus.get_articles!(limit: @almost_infinity, query: query_string),
+           "Webblogg: \"#{query_string}\""}
 
         _ ->
-          Directus.get_articles!(limit: @almost_infinity)
+          {Directus.get_articles!(limit: @almost_infinity), "Webblogg"}
       end
-      |> group_annually
 
     render(conn, :articles,
-      page_title: "Webblogg",
-      articles: articles,
+      page_title: page_title,
+      articles: group_annually(articles),
       q: params["q"],
       nosearch?: params["q"] == nil or params["q"] == ""
     )
