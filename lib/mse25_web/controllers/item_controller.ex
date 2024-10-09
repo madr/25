@@ -154,6 +154,7 @@ defmodule Mse25Web.ItemController do
        }) do
     [
       heading: heading,
+      page_title: heading,
       contents: Earmark.as_html!(contents),
       updated_at: String.slice(updated_at, 0..9)
     ]
