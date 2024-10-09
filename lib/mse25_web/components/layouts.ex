@@ -2,6 +2,7 @@ defmodule Mse25Web.Layouts do
   use Mse25Web, :html
 
   @url "https://madr.se"
+  @list_views ["webblogg", "delningar", "evenemang"]
 
   embed_templates "layouts/*"
 
@@ -40,6 +41,40 @@ defmodule Mse25Web.Layouts do
     <meta property="og:type" content="page" />
     <meta property="og:url" content="#{@url}/#{Enum.join(path, "/")}" />
     <meta property="og:site_name" content="madr.se" />
+    """
+  end
+
+  def robots(%{conn: %{path_info: [first | []]}}) do
+    case String.to_integer(first) do
+      :error ->
+        case Enum.member?(@list_views, first) do
+          true ->
+            ~s"""
+            <meta name="robots" content="noindex,follow" />
+            """
+
+          false ->
+            ~s"""
+            <meta name="robots" content="index,follow" />
+            """
+        end
+
+      _ ->
+        ~s"""
+        <meta name="robots" content="noindex,follow" />
+        """
+    end
+  end
+
+  def robots(%{conn: %{path_info: [_p, _c]}}) do
+    ~s"""
+    <meta name="robots" content="index,follow" />
+    """
+  end
+
+  def robots(_) do
+    ~s"""
+    <meta name="robots" content="noindex,follow" />
     """
   end
 end

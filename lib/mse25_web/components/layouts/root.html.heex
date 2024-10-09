@@ -14,6 +14,7 @@
     />
     <%= canonical(assigns) |> raw %>
     <%= opengraph(assigns) |> raw %>
+    <%= robots(assigns) |> raw %>
   </head>
   <body>
     <%= @inner_content %>
