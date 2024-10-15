@@ -1,11 +1,15 @@
-<article class="article">
-  <h1><%= @heading %></h1>
+<article class="article" vocab="https://schema.org/" typeof="Article">
+  <h1 property="name"><%= @heading %></h1>
 
-  <%= raw(@contents) %>
+  <div property="articleBody">
+    <%= raw(@contents) %>
+  </div>
 
   <footer>
     <p>
-      Publicerad <%= @published_at %> <br />och senast uppdaterad <%= @updated_at %>
+      Publicerad <time property="datePublished"><%= @published_at %></time>
+      av <span property="publisher">Anders Englöf Ytterström</span>, <br /> senast uppdaterad
+      <time property="dateModified"><%= @updated_at %></time>
     </p>
   </footer>
 </article>

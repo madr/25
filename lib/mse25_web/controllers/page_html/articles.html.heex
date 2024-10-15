@@ -29,11 +29,11 @@
     <h2 class="sticky"><%= year %></h2>
     <div class="articles">
       <%= for article <- articles do %>
-        <article>
-          <h2>
+        <article class="article" vocab="https://schema.org/" typeof="Article">
+          <h2 property="name">
             <a href={"/" <> article["slug"]}><%= article["title"] %></a>
           </h2>
-          <time datetime={article["pubDate"]}><%= article["pubDate"] %></time>
+          <time><%= article["pubDate"] %></time>
         </article>
       <% end %>
     </div>

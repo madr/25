@@ -29,15 +29,18 @@
   <section id={"m" <> month}>
     <h2><%= month_name(month) <> ", " <> to_string(@year) %></h2>
     <%= for item = %{t: t} <- items do %>
-      <article>
-        <%= if t == :articles do %>
-          <h3>
+      <%= if t == :articles do %>
+        <article class="article" vocab="https://schema.org/" typeof="Article">
+          <h3 property="name">
             <a href={"/" <> item["slug"]}>
               <%= item["title"] %>
             </a>
           </h3>
-        <% end %>
-        <%= if t == :events do %>
+          <time property="datePublished"><%= item["pubDate"] %></time>
+        </article>
+      <% end %>
+      <%= if t == :events do %>
+        <article>
           <h3>
             <a href={"/" <> item["slug"]}>
               <%= item["title"] %>
@@ -52,8 +55,10 @@
               width="200"
             />
           <% end %>
-        <% end %>
-        <%= if t == :links do %>
+        </article>
+      <% end %>
+      <%= if t == :links do %>
+        <article>
           <h3>
             <%= item["title"] %>
           </h3>
@@ -62,8 +67,10 @@
           <a href={"/" <> item["source"]}>
             <%= item["h1"] %>
           </a>
-        <% end %>
-        <%= if t == :albums do %>
+        </article>
+      <% end %>
+      <%= if t == :albums do %>
+        <article>
           <h3>
             <%= item["artist"] <>
               " - " <> item["album"] <> " (" <> to_string(item["year"]) <> ")" %>
@@ -91,8 +98,8 @@
               width="75"
             />
           <% end %>
-        <% end %>
-      </article>
+        </article>
+      <% end %>
     <% end %>
   </section>
 <% end %>
