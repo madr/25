@@ -1,82 +1,69 @@
-<header>
-  <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <a href="/" rel="home">
-        <span itemprop="name">madr.se</span>
-      </a>
-      <meta itemprop="position" content="1" />
+<h1><%= @page_title %></h1>
+
+<%= raw(@contents) %>
+<section id="map">
+  <h2>Geografisk utspridning</h2>
+  <figure>
+    <div id="leaflet" style="aspect-ratio: 1"></div>
+  </figure>
+</section>
+<p>
+  <%= if @nosearch? do %>
+    Gå direkt till:
+  <% end %>
+</p>
+<ul class="months">
+  <%= for {year, events} <- @events do %>
+    <li>
+      <a href={"#y" <> year}><%= year %></a> (<%= Enum.count(events) %>)
     </li>
-  </ol>
-  <h1><%= @page_title %></h1>
-</header>
-<main id="content">
-  <%= raw(@contents) %>
-  <section id="map">
-    <h2>Geografisk utspridning</h2>
-    <figure>
-      <div id="leaflet" style="aspect-ratio: 1"></div>
-    </figure>
-  </section>
+  <% end %>
+</ul>
+<form method="get" action="/evenemang">
   <p>
     <%= if @nosearch? do %>
-      Gå direkt till:
+      Eller
     <% end %>
+    <label for="q">sök innehåll</label>:
+    <input type="search" value={@q} name="q" id="q" size="7" />
+    <button>Sök</button>
   </p>
-  <ul class="months">
-    <%= for {year, events} <- @events do %>
-      <li>
-        <a href={"#y" <> year}><%= year %></a> (<%= Enum.count(events) %>)
-      </li>
-    <% end %>
-  </ul>
-  <form method="get" action="/evenemang">
-    <p>
-      <%= if @nosearch? do %>
-        Eller
+</form>
+<%= for {year, events} <- @events do %>
+  <section id={"y" <> year}>
+    <h2 class="sticky"><%= year %></h2>
+    <div class="events">
+      <%= for event <- events do %>
+        <article>
+          <h2>
+            <a href={"/" <> event["slug"]}><%= event["title"] %></a>
+          </h2>
+          <p><%= event["lead"] %></p>
+          <%= if hilights?(event) do %>
+            <p>
+              Personliga höjdpunkter: <%= bandlist(event["bands"]) %>
+            </p>
+          <% end %>
+          <%= if missed?(event) do %>
+            <p>
+              Band jag missade: <%= bandlist(event["mia"]) %>
+            </p>
+          <% end %>
+          <%= if opening_acts?(event) do %>
+            <p>
+              Förband: <%= event["bands"] |> Enum.drop(1) |> bandlist() %>
+            </p>
+          <% end %>
+          <%= if event["poster"] do %>
+            <img
+              loading="lazy"
+              src={"https://n.madr.se/assets/" <> event["poster"]}
+              alt="affisch"
+              width="150"
+            />
+          <% end %>
+        </article>
       <% end %>
-      <label for="q">sök innehåll</label>:
-      <input type="search" value={@q} name="q" id="q" size="7" />
-      <button>Sök</button>
-    </p>
-  </form>
-  <%= for {year, events} <- @events do %>
-    <section id={"y" <> year}>
-      <h2 class="sticky"><%= year %></h2>
-      <div class="events">
-        <%= for event <- events do %>
-          <article>
-            <h2>
-              <a href={"/" <> event["slug"]}><%= event["title"] %></a>
-            </h2>
-            <p><%= event["lead"] %></p>
-            <%= if hilights?(event) do %>
-              <p>
-                Personliga höjdpunkter: <%= bandlist(event["bands"]) %>
-              </p>
-            <% end %>
-            <%= if missed?(event) do %>
-              <p>
-                Band jag missade: <%= bandlist(event["mia"]) %>
-              </p>
-            <% end %>
-            <%= if opening_acts?(event) do %>
-              <p>
-                Förband: <%= event["bands"] |> Enum.drop(1) |> bandlist() %>
-              </p>
-            <% end %>
-            <%= if event["poster"] do %>
-              <img
-                loading="lazy"
-                src={"https://n.madr.se/assets/" <> event["poster"]}
-                alt="affisch"
-                width="150"
-              />
-            <% end %>
-          </article>
-        <% end %>
-      </div>
-    </section>
-  <% end %>
-</main>
-<script src="/event-map.js">
-</script>
+    </div>
+  </section>
+<% end %>

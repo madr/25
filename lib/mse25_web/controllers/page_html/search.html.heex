@@ -1,82 +1,71 @@
-<header>
-  <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <a href="/" rel="home">
-        <span itemprop="name">madr.se</span>
-      </a>
-      <meta itemprop="position" content="1" />
-    </li>
-  </ol>
-  <form metod="get" action="/sok">
-    <label for="q">Sök innehåll</label>:
-    <input size="9" type="search" id="q" name="q" value={@q} />
-    <button>Sök</button>
-  </form>
-  <h1><%= @page_title %></h1>
-  <%= for item = %{t: t} <- @results do %>
-    <article>
-      <%= if t == :articles do %>
-        <h3>
-          <a href={"/" <> item["slug"]}>
-            <%= item["title"] %>
-          </a>
-        </h3>
-      <% end %>
-      <%= if t == :events do %>
-        <h3>
-          <a href={"/" <> item["slug"]}>
-            <%= item["title"] %>
-          </a>
-        </h3>
-        <p><%= item["lead"] %></p>
-        <%= if item["poster"] do %>
-          <img
-            src={ "https://n.madr.se/assets/" <> item["poster"] <> "?key=poster"}
-            loading="lazy"
-            alt="Affisch"
-            width="200"
-          />
-        <% end %>
-      <% end %>
-      <%= if t == :links do %>
-        <h3>
+<form metod="get" action="/sok">
+  <label for="q">Sök innehåll</label>: <input size="9" type="search" id="q" name="q" value={@q} />
+  <button>Sök</button>
+</form>
+<h1><%= @page_title %></h1>
+<%= for item = %{t: t} <- @results do %>
+  <article>
+    <%= if t == :articles do %>
+      <h3>
+        <a href={"/" <> item["slug"]}>
           <%= item["title"] %>
-        </h3>
-        <p><%= raw(Earmark.as_html!(item["contents"])) %></p>
-        Källa:
-        <a href={"/" <> item["source"]}>
-          <%= item["h1"] %>
         </a>
+      </h3>
+    <% end %>
+    <%= if t == :events do %>
+      <h3>
+        <a href={"/" <> item["slug"]}>
+          <%= item["title"] %>
+        </a>
+      </h3>
+      <p><%= item["lead"] %></p>
+      <%= if item["poster"] do %>
+        <img
+          src={ "https://n.madr.se/assets/" <> item["poster"] <> "?key=poster"}
+          loading="lazy"
+          alt="Affisch"
+          width="200"
+        />
       <% end %>
-      <%= if t == :albums do %>
-        <h3>
-          <%= item["artist"] <>
-            " - " <> item["album"] <> " (" <> to_string(item["year"]) <> ")" %>
-          <a
-            class="permalink"
-            href={"/" <> to_string(@year) <> "/brutal-legend-" <> item["externalId"]}
-          >
-            #
-          </a>
-        </h3>
-        <%= if item["contents"] do %>
-          <p><%= raw(Earmark.as_html!(item["contents"])) %></p>
-        <% end %>
-        <ul>
-          <%= for song <- item["songs"] do %>
-            <li><%= song["artist"]["name"] <> " - " <> song["title"] %></li>
-          <% end %>
-        </ul>
-        <%= if item["cover"] do %>
-          <img
-            src={"https://n.madr.se/assets/" <> item["cover"] <> "?key=rectangular"}
-            alt="Skivomslag"
-            loading="lazy"
-            height="75"
-            width="75"
-          />
-        <% end %>
+    <% end %>
+    <%= if t == :links do %>
+      <h3>
+        <%= item["title"] %>
+      </h3>
+      <p><%= raw(Earmark.as_html!(item["contents"])) %></p>
+      Källa:
+      <a href={"/" <> item["source"]}>
+        <%= item["h1"] %>
+      </a>
+    <% end %>
+    <%= if t == :albums do %>
+      <h3>
+        <%= item["artist"] <>
+          " - " <> item["album"] <> " (" <> to_string(item["year"]) <> ")" %>
+        <a
+          class="permalink"
+          href={"/" <> to_string(@year) <> "/brutal-legend-" <> item["externalId"]}
+        >
+          #
+        </a>
+      </h3>
+      <%= if item["contents"] do %>
+        <p><%= raw(Earmark.as_html!(item["contents"])) %></p>
       <% end %>
-    </article>
-  <% end %>
-</header>
+      <ul>
+        <%= for song <- item["songs"] do %>
+          <li><%= song["artist"]["name"] <> " - " <> song["title"] %></li>
+        <% end %>
+      </ul>
+      <%= if item["cover"] do %>
+        <img
+          src={"https://n.madr.se/assets/" <> item["cover"] <> "?key=rectangular"}
+          alt="Skivomslag"
+          loading="lazy"
+          height="75"
+          width="75"
+        />
+      <% end %>
+    <% end %>
+  </article>
+<% end %>

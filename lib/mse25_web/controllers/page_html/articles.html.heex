@@ -1,51 +1,41 @@
-<header>
-  <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <a href="/" rel="home">
-        <span itemprop="name">madr.se</span>
-      </a>
-      <meta itemprop="position" content="1" />
-    </li>
-  </ol>
-  <h1>
-    <%= @page_title %>
-  </h1>
-  <p>
-    Inlägg skrivna sedan 2006.
-    <%= if @nosearch? do %>
-      Gå direkt till:
-    <% end %>
-  </p>
-  <ul class="months">
-    <%= for {year, articles} <- @articles do %>
-      <li>
-        <a href={"#y" <> year}><%= year %></a> (<%= Enum.count(articles) %>)
-      </li>
-    <% end %>
-  </ul>
-  <form method="get" action="/webblogg">
-    <p>
-      <%= if @nosearch? do %>
-        Eller
-      <% end %>
-      <label for="q">sök innehåll</label>:
-      <input type="search" value={@q} name="q" id="q" size="7" />
-      <button>Sök</button>
-    </p>
-  </form>
-  <%= for {year, articles} <- @articles do %>
-    <section id={"y" <> year}>
-      <h2 class="sticky"><%= year %></h2>
-      <div class="articles">
-        <%= for article <- articles do %>
-          <article>
-            <h2>
-              <a href={"/" <> article["slug"]}><%= article["title"] %></a>
-            </h2>
-            <date><%= article["pubDate"] %></date>
-          </article>
-        <% end %>
-      </div>
-    </section>
+<h1>
+  <%= @page_title %>
+</h1>
+<p>
+  Inlägg skrivna sedan 2006.
+  <%= if @nosearch? do %>
+    Gå direkt till:
   <% end %>
-</header>
+</p>
+<ul class="months">
+  <%= for {year, articles} <- @articles do %>
+    <li>
+      <a href={"#y" <> year}><%= year %></a> (<%= Enum.count(articles) %>)
+    </li>
+  <% end %>
+</ul>
+<form method="get" action="/webblogg">
+  <p>
+    <%= if @nosearch? do %>
+      Eller
+    <% end %>
+    <label for="q">sök innehåll</label>:
+    <input type="search" value={@q} name="q" id="q" size="7" />
+    <button>Sök</button>
+  </p>
+</form>
+<%= for {year, articles} <- @articles do %>
+  <section id={"y" <> year}>
+    <h2 class="sticky"><%= year %></h2>
+    <div class="articles">
+      <%= for article <- articles do %>
+        <article>
+          <h2>
+            <a href={"/" <> article["slug"]}><%= article["title"] %></a>
+          </h2>
+          <date><%= article["pubDate"] %></date>
+        </article>
+      <% end %>
+    </div>
+  </section>
+<% end %>

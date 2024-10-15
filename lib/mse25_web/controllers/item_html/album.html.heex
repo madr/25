@@ -1,21 +1,5 @@
 <article class="article">
-  <header>
-    <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a href="/" rel="home">
-          <span itemprop="name">madr.se</span>
-        </a>
-        <meta itemprop="position" content="1" />
-      </li>
-      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a href={"/" <> @purchase_year}>
-          <span itemprop="name"><%= @purchase_year %></span>
-        </a>
-        <meta itemprop="position" content="2" />
-      </li>
-    </ol>
-    <h1><%= @artist <> " - " <> @album <> " (" <> @year <> ")" %></h1>
-  </header>
+  <h1><%= @artist <> " - " <> @album <> " (" <> @year <> ")" %></h1>
 
   <p>
     Som jag tidigare skrivit om har jag ett roligt projekt pågående: att äga alla låtar i spelet Brütal Legend äldre än 1990 på vinyl, där det är möjligt.
