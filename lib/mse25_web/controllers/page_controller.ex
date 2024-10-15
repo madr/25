@@ -38,6 +38,7 @@ defmodule Mse25Web.PageController do
 
     render(conn, :search,
       q: query,
+      breadcrumbs: [],
       page_title: scount <> " sökresultat för \"" <> query <> "\"",
       results: results
     )
@@ -60,6 +61,7 @@ defmodule Mse25Web.PageController do
 
     render(conn, :articles,
       page_title: page_title,
+      breadcrumbs: [{"webblogg", "Webblogg"}],
       articles: group_annually(articles),
       q: params["q"],
       nosearch?: params["q"] == nil or params["q"] == ""
@@ -81,6 +83,8 @@ defmodule Mse25Web.PageController do
 
     render(conn, :events,
       page_title: title,
+      breadcrumbs: [],
+      show_interactive_event_map?: true,
       contents: Earmark.as_html!(contents),
       events: events,
       q: params["q"],
@@ -93,6 +97,7 @@ defmodule Mse25Web.PageController do
 
     render(conn, :links,
       page_title: "Delningar",
+      breadcrumbs: [],
       links: links
     )
   end

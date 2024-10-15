@@ -1,3 +1,36 @@
-<a href="#content" class="skiplink">Gå till innehåll</a>
+<a href="#content" class="skiplink">Hoppa till innehållet</a>
 
-<%= @inner_content %>
+<nav>
+  <div>
+    <span class="sr-only">Du är här:</span>
+    <span class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" rel="home">
+          <span itemprop="name">madr.se</span>
+        </a>
+        <meta itemprop="position" content="1" />
+      </span>
+      <%= for {index, {parent_slug, parent_name}} <- breadcrumbs(@breadcrumbs) do %>
+        <span class="sr-only">&gt;</span>
+        <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href={parent_slug}>
+            <span itemprop="name"><%= parent_name %></span>
+          </a>
+          <meta itemprop="position" content={index} />
+        </span>
+      <% end %>
+    </span>
+  </div>
+</nav>
+<main id="content">
+  <%= @inner_content %>
+</main>
+<%= if show_footer?(assigns) do %>
+  <footer>
+    <p>
+      <a href="https://madr.se" rel="home">madr.se</a>
+      är Anders Englöf Ytterströms hemsida. Anders är webbutvecklare, linuxentusiast, ljudtekniker och hårdrockare, bosatt i Borlänge (Dalarna).
+      Läs <a href="/colophon">kolofonen</a>.
+    </p>
+  </footer>
+<% end %>

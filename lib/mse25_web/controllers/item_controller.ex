@@ -73,6 +73,7 @@ defmodule Mse25Web.ItemController do
        do: [
          year: year,
          page_title: "Innehåll från " <> to_string(year),
+         breadcrumbs: [{year, year}],
          timeline: timeline,
          brutal_legends_count: Map.get(counts, :albums, 0),
          article_count: Map.get(counts, :articles, 0),
@@ -86,8 +87,11 @@ defmodule Mse25Web.ItemController do
          "pubDate" => published_at,
          "date_updated" => updated_at
        }) do
+    year = String.slice(published_at, 0..3)
+
     [
       page_title: heading,
+      breadcrumbs: [{"webblogg", "Webblogg"}, {year, year, ""}],
       heading: heading,
       contents: Earmark.as_html!(contents),
       published_at: published_at,
@@ -96,7 +100,7 @@ defmodule Mse25Web.ItemController do
           nil -> published_at
           ua -> String.slice(ua, 0..9)
         end,
-      year: String.slice(published_at, 0..3)
+      year: year
     ]
   end
 
@@ -110,12 +114,15 @@ defmodule Mse25Web.ItemController do
          "mia" => mia,
          "category" => category
        }) do
+    year = String.slice(started_at, 0..3)
+
     [
       page_title: heading,
+      breadcrumbs: [{year, year}],
       heading: heading,
       contents: Earmark.as_html!(contents),
       lead: lead,
-      year: String.slice(started_at, 0..3),
+      year: year,
       poster: poster,
       bands: bands,
       mia: mia,
@@ -131,14 +138,17 @@ defmodule Mse25Web.ItemController do
          "source" => url,
          "h1" => title
        }) do
+    year = String.slice(published_at, 0..3)
+
     [
       page_title: heading,
+      breadcrumbs: [{year, year}],
       heading: heading,
       contents: Earmark.as_html!(contents),
       published_at: published_at,
       url: url,
       title: title,
-      year: String.slice(published_at, 0..3),
+      year: year,
       updated_at:
         case updated_at do
           nil -> published_at
@@ -153,8 +163,9 @@ defmodule Mse25Web.ItemController do
          "date_updated" => updated_at
        }) do
     [
-      heading: heading,
       page_title: heading,
+      breadcrumbs: [],
+      heading: heading,
       contents: Earmark.as_html!(contents),
       updated_at: String.slice(updated_at, 0..9)
     ]
@@ -169,13 +180,16 @@ defmodule Mse25Web.ItemController do
          "externalId" => count,
          "songs" => songs
        }) do
+    purchase_year = String.slice(purchased_at, 0..3)
+
     [
-      count: count,
       page_title: album,
+      breadcrumbs: [{purchase_year, purchase_year}],
+      count: count,
       album: album,
       cover: cover,
       year: to_string(year),
-      purchase_year: String.slice(purchased_at, 0..3),
+      purchase_year: purchase_year,
       contents: Earmark.as_html!(contents),
       songs: Enum.map(songs, fn %{"title" => name} -> "\"" <> name <> "\"" end),
       artist: List.first(songs) |> Map.get("artist") |> Map.get("name")

@@ -77,4 +77,38 @@ defmodule Mse25Web.Layouts do
     <meta name="robots" content="noindex,follow" />
     """
   end
+
+  def breadcrumbs(nodes) do
+    breadcrumbs([], "", 1, nodes)
+  end
+
+  def breadcrumbs(seen, _path, _index, []) do
+    Enum.reverse(seen)
+  end
+
+  def breadcrumbs(seen, path, index, [{slug, name} | nodes]) do
+    breadcrumbs(
+      [{index + 1, {path <> "/" <> to_string(slug), name}} | seen],
+      path <> "/" <> to_string(slug),
+      index + 1,
+      nodes
+    )
+  end
+
+  def breadcrumbs(seen, path, index, [{slug, name, custom_prefix} | nodes]) do
+    breadcrumbs(
+      [{index + 1, {custom_prefix <> "/" <> to_string(slug), name}} | seen],
+      path <> "/" <> to_string(slug),
+      index + 1,
+      nodes
+    )
+  end
+
+  def show_interactive_event_map?(assigns) do
+    Map.has_key?(assigns, :events)
+  end
+
+  def show_footer?(%{heading: "Kolofon"}), do: false
+
+  def show_footer?(%{}), do: true
 end
