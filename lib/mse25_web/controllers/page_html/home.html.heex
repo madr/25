@@ -6,13 +6,13 @@
   </form>
   <div class="tree">
     <div>
-      Senast skrivet (<date><%= @recent_article["pubDate"] %></date>):<br />
+      Senast skrivet (<time><%= @recent_article["pubDate"] %></time>):<br />
       <a href={"/" <> @recent_article["slug"]}>
         <%= @recent_article["title"] %>
       </a>
     </div>
     <div>
-      Dessförinnan (<date><%= @older_article["pubDate"] %></date>):<br />
+      Dessförinnan (<time><%= @older_article["pubDate"] %></time>):<br />
       <a href={"/" <> @older_article["slug"]}>
         <%= @older_article["title"] %>
       </a>
