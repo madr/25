@@ -20,5 +20,9 @@
     <%= @inner_content %>
     <script src={~p"/assets/app.js"}>
     </script>
+    <%= if show_interactive_event_map?(assigns) do %>
+      <script src="/event-map.js">
+      </script>
+    <% end %>
   </body>
 </html>
