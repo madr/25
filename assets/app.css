@@ -4,6 +4,10 @@
     --box-padding: 12px;
 }
 
+#leaflet {
+    aspect-ratio: 1;
+}
+
 html {
     color: var(--color);
     background-color: var(--bgcolor);

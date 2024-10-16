@@ -1,72 +1,73 @@
 <main class="landing">
   <img src={~p"/images/aey.svg"} width="120" alt="Anders Englöf Ytterström" />
-  <form metod="get" action="/sok">
+  <h1 class="sr-only">Anders Englöf Ytterström</h1>
+  <form method="get" action="/sok">
     <label for="q">Sök innehåll</label>: <input size="9" type="search" id="q" name="q" />
     <button>Sök</button>
   </form>
-  <div class="tree">
-    <article class="article">
+  <ul class="tree">
+    <li class="article">
       Senast skrivet (<time><%= @recent_article["pubDate"] %></time>):<br />
       <a href={"/" <> @recent_article["slug"]}>
         <%= @recent_article["title"] %>
       </a>
-    </article>
-    <article class="article">
+    </li>
+    <li class="article">
       Dessförinnan (<time><%= @older_article["pubDate"] %></time>):<br />
       <a href={"/" <> @older_article["slug"]}>
         <%= @older_article["title"] %>
       </a>
-    </article>
-    <article class="page">
+    </li>
+    <li class="page">
       <a href="/webblogg">Webbloggen</a>
-    </article>
+    </li>
     <%= for event <- @upcoming do %>
-      <article class="event">
+      <li class="event">
         Kommande: <a href={event["slug"]}><%= event["title"] %><br /><%= event["lead"] %></a>
-      </article>
+      </li>
     <% end %>
     <%= for event <- @recent_event do %>
-      <article class="event">
+      <li class="event">
         Upplevt: <a href={event["slug"]}><%= event["title"] %><br /><%= event["lead"] %></a>
-      </article>
+      </li>
     <% end %>
-    <article class="feed events page">
+    <li class="feed events page">
       <a href="/evenemang">Evenemangstidslinje</a>
-    </article>
-    <article class="feed ics">
+    </li>
+    <li class="feed ics">
       <a href="/kommande-evenemang.ics">Kommande evenemang</a> (vcalendar)
-    </article>
-    <article class="feed links">
+    </li>
+    <li class="feed links">
       <a href="/delningar">
         Delningar
       </a>
-    </article>
+    </li>
     <%= for legend <- @brutal_legends do %>
-      <article class="album">
+      <li class="album">
         Införskaffat (<%= legend["purchased_at"] %>):<br />
         <a href={"/" <> legend["purchase_year"] <> "/brutal-legend-" <> legend["externalId"]}>
           <%= legend["artist"] %> - <%= legend["album"] %> (<%= legend["year"] %>)
         </a>
-      </article>
+      </li>
     <% end %>
-    <article class="page">
+    <li class="page">
       <a href="/vad-jag-gor">
         Vad jag gör
       </a>
-    </article>
-    <article class="page">
+    </li>
+    <li class="page">
       Mer om:
       <a href="/om">
         Anders, 39, Hårdrockare
       </a>
-    </article>
-    <article class="feed rss">
+    </li>
+    <li class="feed rss">
       <a href="/prenumerera.xml">Prenumerera</a> (RSS 2.0)
-    </article>
-    <article class="page meta">
+    </li>
+    <li class="page meta">
       <a href="/colophon">
         Kontakt &amp; Kolofon
       </a>
-    </article>
-  </div>
+    </li>
+  </ul>
 </main>

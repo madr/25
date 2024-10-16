@@ -75,12 +75,13 @@
       <%= if t == :albums do %>
         <article class="album" vocab="https://schema.org/" typeof="MusicAlbum">
           <h3>
-            <span property="byArtist"><%= @artist %></span>
-            - <%= csl(@songs) %>, från <span property="name"><%= @album %></span>
-            (<span property="copyrightYear"><%= @year %></span>)
+            <span property="byArtist"><%= item["artist"] %></span>
+            - <%= Enum.map(item["songs"], fn %{"title" => name} -> name end) |> csl() %>,
+            från <span property="name"><%= item["album"] %></span>
+            (<span property="copyrightYear"><%= item["year"] %></span>)
             <a
               class="permalink"
-              href={"/" <> to_string(@year) <> "/brutal-legend-" <> item["externalId"]}
+              href={"/" <> to_string(item["year"]) <> "/brutal-legend-" <> item["externalId"]}
             >
               #
             </a>
