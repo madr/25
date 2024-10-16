@@ -1,23 +1,38 @@
-<article class="article">
-  <h1><%= @heading %></h1>
+<article class="event" vocab="https://schema.org/" typeof="Event Review">
+  <h1 property="name"><%= @heading %></h1>
 
   <ul>
-    <li><%= @lead %></li>
+    <li property="description"><%= @lead %></li>
+    <li class="sr-only">
+      <span property="startDate"><%= @started_at %></span>–<span property="endDate"><%= @ended_at %></span>
+    </li>
     <%= if opening_acts?(%{"bands" => @bands, "category" => @category}) do %>
-      <li>Huvudakt: <%= @bands |> List.first() |> Map.get("artists_id") |> Map.get("name") %></li>
-      <li>Förband: <%= @bands |> Enum.drop(1) |> bandlist() %></li>
+      <li>
+        Huvudakt:
+        <span property="performer">
+          <%= @bands |> List.first() |> Map.get("artists_id") |> Map.get("name") %>
+        </span>
+      </li>
+      <li>Förband: <%= @bands |> Enum.drop(1) |> rdfa_bandlist() |> raw %></li>
     <% end %>
     <%= if hilights?(%{"bands" => @bands, "category" => @category}) do %>
-      <li>Personliga höjdpunkter: <%= @bands |> bandlist() %></li>
+      <li>Personliga höjdpunkter: <%= @bands |> rdfa_bandlist() |> raw %></li>
     <% end %>
     <%= if missed?(%{"mia" => @mia, "category" => @category}) do %>
       <li>Band jag missade: <%= @mia |> bandlist() %></li>
     <% end %>
   </ul>
 
-  <%= raw(@contents) %>
+  <div property="reviewBody">
+    <%= raw(@contents) %>
+  </div>
 
   <%= if @poster do %>
-    <img src={"https://n.madr.se/assets/" <> @poster} alt="affisch" loading="lazy" />
+    <img
+      property="image"
+      src={"https://n.madr.se/assets/" <> @poster <> "?key=poster"}
+      alt="affisch"
+      loading="lazy"
+    />
   <% end %>
 </article>

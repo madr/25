@@ -108,6 +108,7 @@ defmodule Mse25Web.ItemController do
          "title" => heading,
          "contents" => contents,
          "started_at" => started_at,
+         "ended_at" => ended_at,
          "lead" => lead,
          "poster" => poster,
          "bands" => bands,
@@ -118,7 +119,7 @@ defmodule Mse25Web.ItemController do
 
     [
       page_title: heading,
-      breadcrumbs: [{year, year}],
+      breadcrumbs: [{"evenemang", "Evenemang"}, {year, year, ""}],
       heading: heading,
       contents: Earmark.as_html!(contents),
       lead: lead,
@@ -126,7 +127,9 @@ defmodule Mse25Web.ItemController do
       poster: poster,
       bands: bands,
       mia: mia,
-      category: category
+      category: category,
+      started_at: started_at,
+      ended_at: ended_at
     ]
   end
 

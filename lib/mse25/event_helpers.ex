@@ -1,11 +1,4 @@
 defmodule Mse25.EventHelpers do
-  def bandlist(bands) do
-    bands
-    |> Enum.map(fn b -> b["artists_id"]["name"] end)
-    |> Enum.join(", ")
-    |> String.replace(~r/, ([^,]+?)$/, " och \\1")
-  end
-
   def hilights?(%{"bands" => bands, "category" => category}) do
     _festival_band?(bands, category)
   end
@@ -29,5 +22,19 @@ defmodule Mse25.EventHelpers do
 
   def _festival_band?(_b, _c) do
     false
+  end
+
+  def bandlist(bands) do
+    bands
+    |> Enum.map(fn b -> b["artists_id"]["name"] end)
+    |> Enum.join(", ")
+    |> String.replace(~r/, ([^,]+?)$/, " och \\1")
+  end
+
+  def rdfa_bandlist(bands) do
+    bands
+    |> Enum.map(fn b -> "<span property=\"performer\">#{b["artists_id"]["name"]}</span>" end)
+    |> Enum.join(", ")
+    |> String.replace(~r/, ([^,]+?)$/, " och \\1")
   end
 end

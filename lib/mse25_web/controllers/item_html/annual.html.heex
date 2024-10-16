@@ -40,15 +40,16 @@
         </article>
       <% end %>
       <%= if t == :events do %>
-        <article>
+        <article class="event" vocab="https://schema.org/" typeof="Event">
           <h3>
-            <a href={"/" <> item["slug"]}>
+            <a property="name" href={"/" <> item["slug"]}>
               <%= item["title"] %>
             </a>
           </h3>
-          <p><%= item["lead"] %></p>
+          <p property="description"><%= item["lead"] %></p>
           <%= if item["poster"] do %>
             <img
+              property="thumbnail"
               src={ "https://n.madr.se/assets/" <> item["poster"] <> "?key=poster"}
               loading="lazy"
               alt="Affisch"
