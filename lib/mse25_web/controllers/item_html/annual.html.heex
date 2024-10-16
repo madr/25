@@ -1,108 +1,107 @@
-<header>
-  <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <a href="/" rel="home">
-        <span itemprop="name">madr.se</span>
-      </a>
-      <meta itemprop="position" content="1" />
+<h1><%= @page_title %></h1>
+<ul>
+  <li><a href={"/" <> to_string(@year - 1)}>Tillbaka till <%= @year - 1 %></a></li>
+  <li><a href={"/" <> to_string(@year + 1)}>Framåt till <%= @year + 1 %></a></li>
+</ul>
+<ul>
+  <%= if @link_count > 0 do %>
+    <li><%= @link_count %> länkar värda att uppmärksamma och kommentera</li>
+  <% end %>
+  <%= if @article_count > 0 do %>
+    <li><%= @article_count %> inlägg i webbloggen</li>
+  <% end %>
+  <%= if @event_count > 0 do %>
+    <li><%= @event_count %> besökta evenemang</li>
+  <% end %>
+  <%= if @brutal_legends_count > 0 do %>
+    <li>
+      <%= @brutal_legends_count %>
+      <%= if @brutal_legends_count == 1 do %>
+        köpt vinylskiva
+      <% else %>
+        köpta vinylskivor
+      <% end %>
+      till Brütal Legend-samlingen
     </li>
-  </ol>
-  <h1><%= @page_title %></h1>
-  <ul>
-    <li><a href={"/" <> to_string(@year - 1)}>Tillbaka till <%= @year - 1 %></a></li>
-    <li><a href={"/" <> to_string(@year + 1)}>Framåt till <%= @year + 1 %></a></li>
-  </ul>
-  <ul>
-    <%= if @link_count > 0 do %>
-      <li><%= @link_count %> länkar värda att uppmärksamma och kommentera</li>
-    <% end %>
-    <%= if @article_count > 0 do %>
-      <li><%= @article_count %> inlägg i webbloggen</li>
-    <% end %>
-    <%= if @event_count > 0 do %>
-      <li><%= @event_count %> besökta evenemang</li>
-    <% end %>
-    <%= if @brutal_legends_count > 0 do %>
-      <li>
-        <%= @brutal_legends_count %>
-        <%= if @brutal_legends_count == 1 do %>
-          köpt vinylskiva
-        <% else %>
-          köpta vinylskivor
-        <% end %>
-        till Brütal Legend-samlingen
-      </li>
-    <% end %>
-  </ul>
-  <%= for {month, items} <- @timeline do %>
-    <section id={"m" <> month}>
-      <h2><%= month_name(month) <> ", " <> to_string(@year) %></h2>
-      <%= for item = %{t: t} <- items do %>
-        <article>
-          <%= if t == :articles do %>
-            <h3>
-              <a href={"/" <> item["slug"]}>
-                <%= item["title"] %>
-              </a>
-            </h3>
-          <% end %>
-          <%= if t == :events do %>
-            <h3>
-              <a href={"/" <> item["slug"]}>
-                <%= item["title"] %>
-              </a>
-            </h3>
-            <p><%= item["lead"] %></p>
-            <%= if item["poster"] do %>
-              <img
-                src={ "https://n.madr.se/assets/" <> item["poster"] <> "?key=poster"}
-                loading="lazy"
-                alt="Affisch"
-                width="200"
-              />
-            <% end %>
-          <% end %>
-          <%= if t == :links do %>
-            <h3>
+  <% end %>
+</ul>
+<%= for {month, items} <- @timeline do %>
+  <section id={"m" <> month}>
+    <h2><%= month_name(month) <> ", " <> to_string(@year) %></h2>
+    <%= for item = %{t: t} <- items do %>
+      <%= if t == :articles do %>
+        <article class="article" vocab="https://schema.org/" typeof="Article">
+          <h3 property="name">
+            <a href={"/" <> item["slug"]}>
               <%= item["title"] %>
-            </h3>
-            <p><%= raw(Earmark.as_html!(item["contents"])) %></p>
-            Källa:
-            <a href={"/" <> item["source"]}>
-              <%= item["h1"] %>
             </a>
-          <% end %>
-          <%= if t == :albums do %>
-            <h3>
-              <%= item["artist"] <>
-                " - " <> item["album"] <> " (" <> to_string(item["year"]) <> ")" %>
-              <a
-                class="permalink"
-                href={"/" <> to_string(@year) <> "/brutal-legend-" <> item["externalId"]}
-              >
-                #
-              </a>
-            </h3>
-            <%= if item["contents"] do %>
-              <p><%= raw(Earmark.as_html!(item["contents"])) %></p>
-            <% end %>
-            <ul>
-              <%= for song <- item["songs"] do %>
-                <li><%= song["artist"]["name"] <> " - " <> song["title"] %></li>
-              <% end %>
-            </ul>
-            <%= if item["cover"] do %>
-              <img
-                src={"https://n.madr.se/assets/" <> item["cover"] <> "?key=rectangular"}
-                alt="Skivomslag"
-                loading="lazy"
-                height="75"
-                width="75"
-              />
-            <% end %>
+          </h3>
+          <time property="datePublished"><%= item["pubDate"] %></time>
+        </article>
+      <% end %>
+      <%= if t == :events do %>
+        <article class="event" vocab="https://schema.org/" typeof="Event">
+          <h3>
+            <a property="name" href={"/" <> item["slug"]}>
+              <%= item["title"] %>
+            </a>
+          </h3>
+          <p property="description"><%= item["lead"] %></p>
+          <%= if item["poster"] do %>
+            <img
+              property="thumbnail"
+              src={ "https://n.madr.se/assets/" <> item["poster"] <> "?key=poster"}
+              loading="lazy"
+              alt="Affisch"
+              width="200"
+            />
           <% end %>
         </article>
       <% end %>
-    </section>
-  <% end %>
-</header>
+      <%= if t == :links do %>
+        <article vocab="https://schema.org/" typeof="WebContent Review" class="bookmark">
+          <h3>
+            <span property="name"><%= item["title"] %></span>
+            <a class="permalink" href={"/" <> item["slug"]} title="Permalänk">#</a>
+          </h3>
+          <div property="reviewBody">
+            <%= item["contents"] |> Earmark.as_html!() |> raw %>
+          </div>
+          <div class="source">
+            Källa: <a href={item["source"]} rel="external"><%= item["h1"] %></a>
+          </div>
+        </article>
+      <% end %>
+      <%= if t == :albums do %>
+        <article class="album" vocab="https://schema.org/" typeof="MusicAlbum">
+          <h3>
+            <span property="byArtist"><%= @artist %></span>
+            - <%= csl(@songs) %>, från <span property="name"><%= @album %></span>
+            (<span property="copyrightYear"><%= @year %></span>)
+            <a
+              class="permalink"
+              href={"/" <> to_string(@year) <> "/brutal-legend-" <> item["externalId"]}
+            >
+              #
+            </a>
+          </h3>
+          <ul>
+            <%= for song <- item["songs"] do %>
+              <li><%= song["artist"]["name"] <> " - " <> song["title"] %></li>
+            <% end %>
+          </ul>
+          <%= if item["cover"] do %>
+            <img
+              property="thumbnail"
+              src={"https://n.madr.se/assets/" <> item["cover"] <> "?key=rectangular"}
+              alt="Skivomslag"
+              loading="lazy"
+              height="75"
+              width="75"
+            />
+          <% end %>
+        </article>
+      <% end %>
+    <% end %>
+  </section>
+<% end %>

@@ -1,3 +1,39 @@
-<main>
+<a href="#content" class="skiplink">Hoppa till innehållet</a>
+
+<nav role="menu">
+  <div>
+    <span class="sr-only">Du är här:</span>
+    <span class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" rel="home">
+          <span itemprop="name">madr.se</span>
+        </a>
+        <meta itemprop="position" content="1" />
+      </span>
+      <%= for {index, {parent_slug, parent_name}} <- breadcrumbs(@breadcrumbs) do %>
+        <span class="sr-only">&gt;</span>
+        <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href={parent_slug}>
+            <span itemprop="name"><%= parent_name %></span>
+          </a>
+          <meta itemprop="position" content={index} />
+        </span>
+      <% end %>
+    </span>
+  </div>
+</nav>
+<main id="content" role="main">
   <%= @inner_content %>
 </main>
+<%= if show_footer?(assigns) do %>
+  <footer role="contentinfo">
+    <p vocab="https://schema.org/" typeof="Person">
+      <a href="https://madr.se" property="url">madr.se</a>
+      är <span property="name">Anders Englöf Ytterström</span>s hemsida. Anders är <span property="jobTitle">webbutvecklare</span>, linuxentusiast, ljudtekniker och hårdrockare, bosatt i <span
+        property="address"
+        typeof="PostalAddress"
+      ><span property="addressLocality">Borlänge</span> (<span property="addressRegion">Dalarna</span>)</span>.
+      Läs <a href="/colophon">kolofonen</a>.
+    </p>
+  </footer>
+<% end %>

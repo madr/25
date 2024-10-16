@@ -1,73 +1,65 @@
-<header>
-  <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <a href="/" rel="home">
-        <span itemprop="name">madr.se</span>
-      </a>
-      <meta itemprop="position" content="1" />
-    </li>
-  </ol>
-  <h1>Delningar</h1>
-  <p>
-    Länkar som är värda att uppmärksammas och lämna åsikt om.
-  </p>
-  <%= for {date, links} <- @links do %>
-    <section id={"d" <> date}>
-      <div class="links">
-        <h2>
-          <%= date
-          |> Date.from_iso8601!()
-          |> Calendar.strftime(
-            "%A, %d %B %Y",
-            month_names: fn m ->
-              Enum.at(
-                [
-                  "januari",
-                  "februari",
-                  "mars",
-                  "april",
-                  "maj",
-                  "juni",
-                  "juli",
-                  "augusti",
-                  "september",
-                  "oktober",
-                  "november",
-                  "december"
-                ],
-                m - 1
-              )
-            end,
-            day_of_week_names: fn d ->
-              Enum.at(
-                [
-                  "måndag",
-                  "tisdag",
-                  "onsdag",
-                  "torsdag",
-                  "fredag",
-                  "lördag",
-                  "söndag"
-                ],
-                d - 1
-              )
-            end
-          )
-          |> String.replace(~r/ 0/, " ") %>
-        </h2>
-        <%= for link <- links do %>
-          <article>
-            <h3>
-              <%= link["title"] %>
-              <a class="permalink" href={"/" <> link["slug"]} title="Permalänk">#</a>
-            </h3>
+<h1>Delningar</h1>
+<p>
+  Länkar som är värda att uppmärksammas och lämna åsikt om.
+</p>
+<%= for {date, links} <- @links do %>
+  <section id={"d" <> date}>
+    <div class="links">
+      <h2>
+        <%= date
+        |> Date.from_iso8601!()
+        |> Calendar.strftime(
+          "%A, %d %B %Y",
+          month_names: fn m ->
+            Enum.at(
+              [
+                "januari",
+                "februari",
+                "mars",
+                "april",
+                "maj",
+                "juni",
+                "juli",
+                "augusti",
+                "september",
+                "oktober",
+                "november",
+                "december"
+              ],
+              m - 1
+            )
+          end,
+          day_of_week_names: fn d ->
+            Enum.at(
+              [
+                "måndag",
+                "tisdag",
+                "onsdag",
+                "torsdag",
+                "fredag",
+                "lördag",
+                "söndag"
+              ],
+              d - 1
+            )
+          end
+        )
+        |> String.replace(~r/ 0/, " ") %>
+      </h2>
+      <%= for link <- links do %>
+        <article vocab="https://schema.org/" typeof="WebContent Review" class="bookmark">
+          <h3>
+            <span property="name"><%= link["title"] %></span>
+            <a class="permalink" href={"/" <> link["slug"]} title="Permalänk">#</a>
+          </h3>
+          <div property="reviewBody">
             <%= link["contents"] |> Earmark.as_html!() |> raw %>
-            <div class="source">
-              Källa: <a href={link["source"]} rel="external"><%= link["h1"] %></a>
-            </div>
-          </article>
-        <% end %>
-      </div>
-    </section>
-  <% end %>
-</header>
+          </div>
+          <div class="source">
+            Källa: <a href={link["source"]} rel="external"><%= link["h1"] %></a>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  </section>
+<% end %>

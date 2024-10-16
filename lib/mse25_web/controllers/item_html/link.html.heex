@@ -1,35 +1,16 @@
-<article class="article">
-  <header>
-    <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a href="/" rel="home">
-          <span itemprop="name">madr.se</span>
-        </a>
-        <meta itemprop="position" content="1" />
-      </li>
-      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a href="/delningar">
-          <span itemprop="name">Delningar</span>
-        </a>
-        <meta itemprop="position" content="2" />
-      </li>
-      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a href={"/" <> @year}>
-          <span itemprop="name"><%= @year %></span>
-        </a>
-        <meta itemprop="position" content="3" />
-      </li>
-    </ol>
-    <h1><%= @heading %></h1>
-  </header>
-
-  <%= raw(@contents) %>
-  <p>
-    Källa: <a href={@url} rel="external"><%= @title %></a>
-  </p>
+<article vocab="https://schema.org/" typeof="WebContent Review" class="bookmark">
+  <h1 property="name"><%= @heading %></h1>
+  <div property="reviewBody">
+    <%= raw(@contents) %>
+  </div>
+  <div class="source">
+    Källa: <a href={@url} property="url"><span property="headline"><%= @title %></span></a>
+  </div>
   <footer>
     <p>
-      Publicerad <%= @published_at %> <br />och senast uppdaterad <%= @updated_at %>
+      Publicerad <time property="datePublished archivedAt"><%= @published_at %></time>
+      av <span property="author">Anders Englöf Ytterström</span>,<br />Senast uppdaterad
+      <time property="dateModified"><%= @updated_at %></time>
     </p>
   </footer>
 </article>

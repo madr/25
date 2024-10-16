@@ -1,21 +1,7 @@
-<article class="article">
-  <header>
-    <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a href="/" rel="home">
-          <span itemprop="name">madr.se</span>
-        </a>
-        <meta itemprop="position" content="1" />
-      </li>
-      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a href={"/" <> @purchase_year}>
-          <span itemprop="name"><%= @purchase_year %></span>
-        </a>
-        <meta itemprop="position" content="2" />
-      </li>
-    </ol>
-    <h1><%= @artist <> " - " <> @album <> " (" <> @year <> ")" %></h1>
-  </header>
+<article class="album" vocab="https://schema.org/" typeof="MusicAlbum Review">
+  <h1>
+    <%= @summary %>
+  </h1>
 
   <p>
     Som jag tidigare skrivit om har jag ett roligt projekt pågående: att äga alla låtar i spelet Brütal Legend äldre än 1990 på vinyl, där det är möjligt.
@@ -23,18 +9,23 @@
 
   <div class="brutal-legend">
     <p>
-      #<%= @count %>: <%= @artist %> - <%= csl(@songs) %>, från <%= @album %> (<%= @year %>)
+      #<%= @count %>: <span property="byArtist"><%= @artist %></span>
+      - <%= csl(@songs) %>, från <span property="name"><%= @album %></span>
+      (<span property="copyrightYear"><%= @year %></span>)
     </p>
     <%= if @cover do %>
       <img
-        src={"https://n.madr.se/assets/" <> @cover <> "?key=rectangular"}
+        property="image"
+        src={"https://n.madr.se/assets/" <> @cover <> "?key=cover"}
         alt="Skivomslag"
         loading="lazy"
-        height="75"
-        width="75"
+        height="333"
+        width="333"
       />
     <% end %>
   </div>
 
-  <%= raw(@contents) %>
+  <div property="reviewBody">
+    <%= raw(@contents) %>
+  </div>
 </article>

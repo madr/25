@@ -1,14 +1,5 @@
-<header>
-  <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <a href="/" rel="home">
-        <span itemprop="name">madr.se</span>
-      </a>
-      <meta itemprop="position" content="1" />
-    </li>
-  </ol>
-  <h1><%= @page_title %></h1>
-</header>
+<h1><%= @page_title %></h1>
+
 <%= raw(@contents) %>
 <section id="map">
   <h2>Geografisk utspridning</h2>
@@ -43,14 +34,14 @@
     <h2 class="sticky"><%= year %></h2>
     <div class="events">
       <%= for event <- events do %>
-        <article>
+        <article class="event" vocab="https://schema.org/" typeof="Event">
           <h2>
-            <a href={"/" <> event["slug"]}><%= event["title"] %></a>
+            <a property="name" href={"/" <> event["slug"]}><%= event["title"] %></a>
           </h2>
-          <p><%= event["lead"] %></p>
+          <p property="description"><%= event["lead"] %></p>
           <%= if hilights?(event) do %>
             <p>
-              Personliga höjdpunkter: <%= bandlist(event["bands"]) %>
+              Personliga höjdpunkter: <%= rdfa_bandlist(event["bands"]) |> raw %>
             </p>
           <% end %>
           <%= if missed?(event) do %>
@@ -60,13 +51,14 @@
           <% end %>
           <%= if opening_acts?(event) do %>
             <p>
-              Förband: <%= event["bands"] |> Enum.drop(1) |> bandlist() %>
+              Förband: <%= event["bands"] |> Enum.drop(1) |> rdfa_bandlist() |> raw %>
             </p>
           <% end %>
           <%= if event["poster"] do %>
             <img
+              property="thumbnail"
               loading="lazy"
-              src={"https://n.madr.se/assets/" <> event["poster"]}
+              src={"https://n.madr.se/assets/" <> event["poster"] <> "?key=poster"}
               alt="affisch"
               width="150"
             />
@@ -76,5 +68,3 @@
     </div>
   </section>
 <% end %>
-<script src="/event-map.js">
-</script>

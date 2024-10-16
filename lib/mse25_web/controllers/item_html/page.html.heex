@@ -1,19 +1,13 @@
-<article>
-  <header>
-    <ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a href="/" rel="home">
-          <span itemprop="name">madr.se</span>
-        </a>
-        <meta itemprop="position" content="1" />
-      </li>
-    </ol>
-    <h1><%= @heading %></h1>
-  </header>
+<article class="article" vocab="https://schema.org/" typeof="Article">
+  <h1 property="name"><%= @heading %></h1>
 
-  <%= raw(@contents) %>
+  <div property="articleBody">
+    <%= raw(@contents) %>
+  </div>
 
   <footer>
-    <p>Senast uppdaterad <%= @updated_at %></p>
+    <p>
+      Senast uppdaterad <time property="dateModified"><%= @updated_at %></time>
+    </p>
   </footer>
 </article>

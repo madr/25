@@ -43,16 +43,30 @@ defmodule Mse25.Directus do
   end
 
   def get_album(externalId) do
-    get_item(
-      :albums,
-      externalId,
-      [
-        "*",
-        "songs.title",
-        "songs.artist.name"
-      ]
-      |> Enum.join(",")
-    )
+    case get_item(
+           :albums,
+           externalId,
+           [
+             "*",
+             "songs.title",
+             "songs.artist.name"
+           ]
+           |> Enum.join(",")
+         ) do
+      {:ok,
+       data = %{
+         "album" => album,
+         "year" => year,
+         "songs" => [%{"artist" => %{"name" => artist}} | _]
+       }} ->
+        {:ok,
+         data
+         |> Map.put("artist", artist)
+         |> Map.put("summary", "#{artist} - #{album} (#{to_string(year)})")}
+
+      not_found ->
+        not_found
+    end
   end
 
   def get_albums!(options \\ []) do
@@ -120,6 +134,7 @@ defmodule Mse25.Directus do
         "fields=" <>
           Enum.join(
             [
+              "id",
               "title",
               "lead",
               "slug",
@@ -128,6 +143,7 @@ defmodule Mse25.Directus do
               "started_at",
               "ended_at",
               "contents",
+              "date_created",
               "bands.artists_id.name",
               "mia.artists_id.name",
               "location.*"
