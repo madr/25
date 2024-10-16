@@ -178,12 +178,14 @@ defmodule Mse25Web.ItemController do
          "cover" => cover,
          "purchased_at" => purchased_at,
          "externalId" => count,
-         "songs" => songs
+         "songs" => songs,
+         "summary" => summary,
+         "artist" => artist
        }) do
     purchase_year = String.slice(purchased_at, 0..3)
 
     [
-      page_title: album,
+      page_title: summary,
       breadcrumbs: [{purchase_year, purchase_year}],
       count: count,
       album: album,
@@ -192,7 +194,8 @@ defmodule Mse25Web.ItemController do
       purchase_year: purchase_year,
       contents: Earmark.as_html!(contents),
       songs: Enum.map(songs, fn %{"title" => name} -> "\"" <> name <> "\"" end),
-      artist: List.first(songs) |> Map.get("artist") |> Map.get("name")
+      artist: artist,
+      summary: summary
     ]
   end
 end

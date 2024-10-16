@@ -72,10 +72,11 @@
         </article>
       <% end %>
       <%= if t == :albums do %>
-        <article>
+        <article class="album" vocab="https://schema.org/" typeof="MusicAlbum">
           <h3>
-            <%= item["artist"] <>
-              " - " <> item["album"] <> " (" <> to_string(item["year"]) <> ")" %>
+            <span property="byArtist"><%= @artist %></span>
+            - <%= csl(@songs) %>, från <span property="name"><%= @album %></span>
+            (<span property="copyrightYear"><%= @year %></span>)
             <a
               class="permalink"
               href={"/" <> to_string(@year) <> "/brutal-legend-" <> item["externalId"]}
@@ -83,9 +84,6 @@
               #
             </a>
           </h3>
-          <%= if item["contents"] do %>
-            <p><%= raw(Earmark.as_html!(item["contents"])) %></p>
-          <% end %>
           <ul>
             <%= for song <- item["songs"] do %>
               <li><%= song["artist"]["name"] <> " - " <> song["title"] %></li>
@@ -93,6 +91,7 @@
           </ul>
           <%= if item["cover"] do %>
             <img
+              property="thumbnail"
               src={"https://n.madr.se/assets/" <> item["cover"] <> "?key=rectangular"}
               alt="Skivomslag"
               loading="lazy"
