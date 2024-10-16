@@ -58,15 +58,17 @@
         </article>
       <% end %>
       <%= if t == :links do %>
-        <article>
+        <article vocab="https://schema.org/" typeof="WebContent Review" class="bookmark">
           <h3>
-            <%= item["title"] %>
+            <span property="name"><%= item["title"] %></span>
+            <a class="permalink" href={"/" <> item["slug"]} title="Permalänk">#</a>
           </h3>
-          <p><%= raw(Earmark.as_html!(item["contents"])) %></p>
-          Källa:
-          <a href={"/" <> item["source"]}>
-            <%= item["h1"] %>
-          </a>
+          <div property="reviewBody">
+            <%= item["contents"] |> Earmark.as_html!() |> raw %>
+          </div>
+          <div class="source">
+            Källa: <a href={item["source"]} rel="external"><%= item["h1"] %></a>
+          </div>
         </article>
       <% end %>
       <%= if t == :albums do %>

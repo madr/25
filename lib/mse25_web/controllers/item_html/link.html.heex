@@ -1,13 +1,16 @@
-<article class="article">
-  <h1><%= @heading %></h1>
-
-  <%= raw(@contents) %>
-  <p>
-    Källa: <a href={@url} rel="external"><%= @title %></a>
-  </p>
+<article vocab="https://schema.org/" typeof="WebContent Review" class="bookmark">
+  <h1 property="name"><%= @heading %></h1>
+  <div property="reviewBody">
+    <%= raw(@contents) %>
+  </div>
+  <div class="source">
+    Källa: <a href={@url} property="url"><span property="headline"><%= @title %></span></a>
+  </div>
   <footer>
     <p>
-      Publicerad <%= @published_at %> <br />och senast uppdaterad <%= @updated_at %>
+      Publicerad <time property="datePublished archivedAt"><%= @published_at %></time>
+      av <span property="author">Anders Englöf Ytterström</span>,<br />Senast uppdaterad
+      <time property="dateModified"><%= @updated_at %></time>
     </p>
   </footer>
 </article>

@@ -142,7 +142,7 @@ defmodule Mse25Web.ItemController do
 
     [
       page_title: heading,
-      breadcrumbs: [{year, year}],
+      breadcrumbs: [{"delningar", "Delningar"}, {year, year, ""}],
       heading: heading,
       contents: Earmark.as_html!(contents),
       published_at: published_at,

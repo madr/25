@@ -47,12 +47,14 @@
         |> String.replace(~r/ 0/, " ") %>
       </h2>
       <%= for link <- links do %>
-        <article>
+        <article vocab="https://schema.org/" typeof="WebContent Review" class="bookmark">
           <h3>
-            <%= link["title"] %>
+            <span property="name"><%= link["title"] %></span>
             <a class="permalink" href={"/" <> link["slug"]} title="Permalänk">#</a>
           </h3>
-          <%= link["contents"] |> Earmark.as_html!() |> raw %>
+          <div property="reviewBody">
+            <%= link["contents"] |> Earmark.as_html!() |> raw %>
+          </div>
           <div class="source">
             Källa: <a href={link["source"]} rel="external"><%= link["h1"] %></a>
           </div>
