@@ -17,7 +17,8 @@ defmodule Mse25Web do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
+  def static_paths,
+    do: ~w(assets fonts images bl favicon.ico robots.txt aey.vcf app.css cv)
 
   def router do
     quote do
