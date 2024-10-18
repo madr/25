@@ -1,50 +1,64 @@
 <main class="landing">
   <img src={~p"/images/aey.svg"} width="120" alt="Anders Englöf Ytterström" />
-  <h1 class="sr-only">Anders Englöf Ytterström</h1>
-  <form method="get" action="/sok">
-    <label for="q">Sök innehåll</label>: <input size="9" type="search" id="q" name="q" />
-    <button>Sök</button>
-  </form>
+  <h1 class="home-h1">Anders Englöf Ytterström</h1>
   <ul class="tree">
     <li class="article">
-      Senast skrivet (<time><%= @recent_article["pubDate"] %></time>):<br />
       <a href={"/" <> @recent_article["slug"]}>
         <%= @recent_article["title"] %>
       </a>
+      <small>(<time><%= @recent_article["pubDate"] %></time>)</small>
     </li>
     <li class="article">
-      Dessförinnan (<time><%= @older_article["pubDate"] %></time>):<br />
       <a href={"/" <> @older_article["slug"]}>
         <%= @older_article["title"] %>
       </a>
+      <small>(<time><%= @older_article["pubDate"] %></time>)</small>
     </li>
     <li class="page">
-      <a href="/webblogg">Webbloggen</a>
+      <a href="/webblogg" class="list-link">Alla Webbloggens inlägg</a>
     </li>
-    <%= for event <- @upcoming do %>
-      <li class="event">
-        Kommande: <a href={event["slug"]}><%= event["title"] %><br /><%= event["lead"] %></a>
+    <%= for event <- @recent_event do %>
+      <li class="events">
+        <a href={event["slug"]} title={event["lead"]}>
+          <%= event["title"] %> (<%= event["started_at"] %>)
+        </a>
+        <%= if event["poster"] do %>
+          <img
+            src={"https://n.madr.se/assets/" <> event["poster"] <> "?key=thumbnail"}
+            alt="affisch"
+            loading="lazy"
+          />
+        <% end %>
       </li>
     <% end %>
-    <%= for event <- @recent_event do %>
-      <li class="event">
-        Upplevt: <a href={event["slug"]}><%= event["title"] %><br /><%= event["lead"] %></a>
+    <%= for event <- @upcoming do %>
+      <li class="events">
+        <a href={event["slug"]} title={event["lead"]}>
+          <%= event["title"] %> (<%= event["started_at"] %>)
+        </a>
+        <%= if event["poster"] do %>
+          <img
+            src={"https://n.madr.se/assets/" <> event["poster"] <> "?key=thumbnail"}
+            alt="affisch"
+            loading="lazy"
+          />
+        <% end %>
       </li>
     <% end %>
     <li class="feed events page">
-      <a href="/evenemang">Evenemangstidslinje</a>
+      <a href="/evenemang" class="list-link">Evenemangstidslinje</a>
     </li>
-    <li class="feed ics">
-      <a href="/kommande-evenemang.ics">Kommande evenemang</a> (vcalendar)
+    <li class="feed events ics">
+      <a href="/kommande-evenemang.ics" class="feed-link">Kommande evenemang</a>
+      <small>(vcalendar)</small>
     </li>
     <li class="feed links">
-      <a href="/delningar">
+      <a href="/delningar" class="list-link">
         Delningar
       </a>
     </li>
     <%= for legend <- @brutal_legends do %>
       <li class="album">
-        Införskaffat (<%= legend["purchased_at"] %>):<br />
         <a href={"/" <> legend["purchase_year"] <> "/brutal-legend-" <> legend["externalId"]}>
           <%= legend["artist"] %> - <%= legend["album"] %> (<%= legend["year"] %>)
         </a>
@@ -56,17 +70,35 @@
       </a>
     </li>
     <li class="page">
-      Mer om:
       <a href="/om">
         Anders, 39, Hårdrockare
       </a>
     </li>
     <li class="feed rss">
-      <a href="/prenumerera.xml">Prenumerera</a> (RSS 2.0)
+      <a href="/prenumerera.xml" class="feed-link">Prenumerera</a> <small>(RSS 2.0)</small>
     </li>
-    <li class="page meta">
+    <li class="">
+      <a clasS="feed-link" href="aey.vcard">
+        Kontakt
+      </a>
+      <small>(vcard)</small>
+    </li>
+  </ul>
+  <form method="get" action="/sok">
+    <label for="q">Sök innehåll</label>: <input size="9" type="search" id="q" name="q" />
+    <button>Sök</button>
+  </form>
+  <ul class="profiles">
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/madr">Github</a></li>
+    <li>
+      <a href="https://www.discogs.com/user/madrse/collection?limit=250&sort=artist&sort_order=asc&layout=big">
+        Discogs
+      </a>
+    </li>
+    <li>
       <a href="/colophon">
-        Kontakt &amp; Kolofon
+        Kolofon
       </a>
     </li>
   </ul>

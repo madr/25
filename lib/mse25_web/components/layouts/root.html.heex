@@ -2,9 +2,11 @@
 <html lang="sv">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="csrf-token" content={get_csrf_token()} />
     <title><%= assigns.page_title || "Anders Englöf Ytterström" %> | madr.se</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noimageai" />
+    <meta name="robots" content="noai" />
+    <meta name="author" content="Anders Englöf Ytterström" />
     <link rel="stylesheet" href={~p"/assets/app.css"} />
     <link
       href="/prenumerera.xml"
@@ -15,6 +17,9 @@
     <%= canonical(assigns) |> raw %>
     <%= opengraph(assigns) |> raw %>
     <%= robots(assigns) |> raw %>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   </head>
   <body>
     <%= @inner_content %>
