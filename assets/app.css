@@ -1,59 +1,150 @@
-:root {
-    --color: #fff;
-    --bgcolor: #201;
-    --box-padding: 12px;
-}
+/*
+Main CSS file for madr.se
+If you have any questions regarding the CSS, feel free
+to contact me: yttan at madr dot se
 
-#leaflet {
-    aspect-ratio: 1;
+Table of contents, 7-1 inspired
+
+1. Base
+2. Components
+3. Layout
+4. Pages
+5. Themes
+6. Vendors
+7. Shame
+*/
+
+/* === 1. Base === */
+
+/*
+Normalize and resets.
+Only properties, element and attribute selectors are allowed in this
+section.
+
+All dynamic values that should change according to user preferences
+(dark or light color mode, reduced motion etc) and agent abilities
+(small handheld screen, big desktop screen) are handled by properties
+when appliable.
+
+This is to avoid redeclarating CSS rules.
+*/
+
+:root {
+    /* colors, dark mode default */
+    --color: hsl(0 0 90%);
+    --bgcolor: hsl(180 75% 6%);
+    --tree-item-accent-color: dimgrey;
+    --panel-bg-color: hsla(0 0 50% / 0.16);
+    --monospace-color: springgreen;
+    --monospace-color-inline: seagreen;
+
+    /* typography, mobile first */
+    --base-font-size: 1.33em;
+    --page-title-font-size: 2em;
+    --tree-font-size: 0.85em;
+    --section-heading-lv2-font-size: 1.5em;
+    --section-heading-lv3-font-size: 1.2em;
+    --section-heading-lv4-font-size: 1em;
+    --system-serif-fonts: Cambria, Cochin, Georgia, Times, "Times New Roman",
+        serif;
+    --system-sansserif-fonts: apple-system, system-ui, BlinkMacSystemFont,
+        Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+    --monospace-fonts: "JetBrains mono", monaco, menlo, meslo, "Courier New",
+        Courier, monospace;
+
+    /* whitespace */
+    --gap-sm: 0.5em;
+    --gap-md: 1em;
+    --gap-lg: 3em;
+
+    /* transitions */
+    --animation-duration: 0.5s;
+
+    /* dimensions and aspect ratios */
+    --map-ratio: 1;
+
+    @media (min-width: 666px) {
+        --base-font-size: 1.66em;
+        --tree-font-size: 0.67em;
+    }
 }
 
 html {
     color: var(--color);
     background-color: var(--bgcolor);
-    background-image: linear-gradient(#000, #201 333px);
-    font:
-        normal small/1.5 apple-system,
-        system-ui,
-        BlinkMacSystemFont,
-        Segoe UI,
-        Roboto,
-        Helvetica Neue,
-        Arial,
-        sans-serif;
+    font: normal var(--base-font-size) / 1.5 var(--system-sansserif-fonts);
 }
 
 body {
     margin: 0;
-    min-height: 100vh;
+
+    > footer > p {
+        margin-top: var(--gap-lg);
+        color: #666;
+        font-size: 0.66em;
+    }
+}
+
+input,
+button {
+    font-size: 1.2em;
+    padding: 0.25em;
 }
 
 h1,
 h2,
 h3 {
-    line-height: 1.1;
-    font-family: serif;
+    font-family: var(--system-serif-fonts);
 }
 
-main {
-    background-color: #000;
-    margin: 0 auto;
-    max-width: 40em;
-    box-sizing: border-box;
-    padding: 3em;
+h1 {
+    margin: 0.5em 0;
+    line-height: 0.95;
+    font-size: var(--page-title-font-size);
+
+    @media (min-width: 666px) {
+        text-transform: lowercase;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        text-align: right;
+        line-height: 0.9;
+        color: var(--tree-item-accent-color);
+        font-weight: normal;
+    }
+}
+
+h2,
+h3 {
+    margin-top: 2em;
+    line-height: 1.1;
+}
+
+h2 {
+    font-size: var(--section-heading-lv2-font-size);
+    border-bottom: 3px solid var(--panel-bg-color);
+}
+
+h3 {
+    font-size: var(--section-heading-lv3-font-size);
+}
+
+h4 {
+    font-size: var(--section-heading-lv4-font-size);
 }
 
 pre {
     margin: 2em 0;
     background-color: #022;
+    color: var(--monospace-color);
     overflow-y: auto;
-    padding: 0.33em;
-    box-shadow: 4px 4px 0 #333;
+    padding: 0.66em;
+    box-shadow: 4px 4px 0 var(--panel-bg-color);
     position: relative;
     line-height: 1.2;
     font-size: 0.8em;
 
     > button {
+        font-size: 0.75em;
         position: absolute;
         top: 0.25em;
         right: 0.25em;
@@ -61,29 +152,116 @@ pre {
 }
 
 code {
-    font-family: "JetBrains mono", monaco, menlo, meslo, "Courier New", Courier,
-        monospace;
+    font-family: var(--monospace-fonts);
+
+    &.inline {
+        color: var(--monospace-color-inline);
+        background: #f3f3f3;
+        font-size: 0.9em;
+    }
 }
 
 section {
     position: relative;
 
     & > h2 {
-        background: #000;
-        padding: 1em 0;
+        background: var(--bgcolor);
+        color: var(--color);
+        padding: 0.5em 0.25em;
+        border-bottom: 0;
     }
 }
 
-.skiplink {
-    position: absolute;
-    top: -5em;
-    transition: top 0.4s ease-out;
-    padding: 0.25em 0.5em;
-
-    &:focus {
-        top: 1em;
-    }
+img {
+    max-width: 100%;
+    display: block;
+    height: auto;
 }
+
+ul,
+ol {
+    clear: left;
+}
+
+p {
+    margin: 1em 0;
+}
+
+article {
+    line-height: 1.33;
+}
+
+figure {
+    margin: 0;
+}
+
+figcaption {
+    text-align: center;
+    margin-top: 0.5em;
+}
+
+table {
+    width: 100%;
+}
+
+td,
+th {
+    background-color: var(--background-color-l);
+    padding: 0.25em;
+    font-size: 0.8em;
+    border: 1px solid rgb(128, 128, 128, 0.5);
+}
+
+th {
+    background-color: var(--background-color-ll);
+    text-transform: uppercase;
+    color: var(--em-color);
+    font-weight: normal;
+}
+
+li {
+    color: var(--em-color);
+    margin: 0.25em 0;
+}
+
+li:first-child {
+    margin-top: 0;
+}
+
+li:last-child {
+    margin-bottom: 0;
+}
+
+li::marker {
+    color: var(--link-color);
+}
+
+blockquote {
+    color: var(--em-color);
+    font-size: 1.2em;
+    line-height: 1.2;
+    font-style: italic;
+    border-left: 5px solid var(--background-color-l);
+    margin: 1em 1em 1em 0;
+    padding-left: 1em;
+}
+
+blockquote p::after,
+blockquote p::before {
+    content: '"';
+}
+
+/* === /Base === */
+/* === 2. Components === */
+
+/*
+Use kebab case named classes to identify components, and nesting
+to group subcomponents.
+
+Element selectors are preferred as subcomponents, due to the simple
+nature of this site. As a general rule though, classes are the most
+versatile.
+*/
 
 .sr-only {
     position: absolute;
@@ -96,32 +274,91 @@ section {
     align-items: center;
 }
 
+.sticky {
+    position: sticky;
+    top: 0;
+}
+
+.interactive-map {
+    aspect-ratio: var(--map-ratio);
+}
+
+.home-h1 {
+    font-size: 1.33em;
+}
+
+.list-link {
+    &::after {
+        content: " →";
+    }
+}
+
+.feed-link {
+    &::after {
+        content: " ↗";
+    }
+}
+
+.skiplink {
+    position: absolute;
+    top: -5em;
+    transition: top var(--animation-duration) ease-out;
+    padding: 0.25em 0.5em;
+
+    &:focus {
+        top: 1em;
+    }
+}
+
 .tree {
-    color: crimson;
-    align-items: center;
-    justify-content: center;
-    margin: 1em auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5em;
+    gap: 0.66em;
+    font-size: var(--tree-font-size);
 
-    > * {
-        padding: 0.5em 1em;
-        border-radius: 5px;
-        background-color: rgba(128, 128, 128, 0.1);
+    > li {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        gap: 0.5em;
+        padding: 1.33em 0.5em;
+        background-color: rgba(128, 128, 128, 0.16);
+        border-left: 6px solid var(--tree-item-accent-color);
 
         &:focus-within {
             background-color: rgba(128, 128, 128, 0.25);
         }
+
+        > small {
+            opacity: 0.66;
+            font-family: var(--monospace-fonts);
+            font-size: 0.66em;
+        }
     }
 
-    > :nth-child(even) {
-        text-align: right;
+    > .article {
+        --tree-item-accent-color: rebeccapurple;
+    }
+
+    > .album {
+        --tree-item-accent-color: goldenrod;
+    }
+
+    > .link {
+        --tree-item-accent-color: honeydew;
+    }
+
+    > .events {
+        --tree-item-accent-color: firebrick;
     }
 
     a {
-        color: #fff;
+        color: var(--color);
         text-decoration: none;
+        flex: 1;
 
         &:hover,
         &:focus {
@@ -131,43 +368,33 @@ section {
 }
 
 .landing {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 3em;
+    padding: 2em 0;
     box-sizing: border-box;
-    gap: 3em;
+    gap: 1.66em;
 }
 
 .breadcrumbs {
-    list-style: none;
-    padding-left: 0;
+    display: block;
+    margin: var(--gap-sm) 0;
+    padding: var(--gap-sm);
+    border: 1px solid rgb(128, 128, 128, 0.25);
+    background-color: var(--panel-bg-color);
+    border-radius: 0;
 
-    > li {
+    > span {
         display: inline;
 
         &:after {
             content: " /";
         }
     }
-}
 
-.article {
-    font-size: large;
-    box-sizing: border-box;
-
-    > footer {
-        font-style: italic;
-        text-align: right;
-        font-size: 0.8em;
+    a {
+        color: var(--color);
     }
-}
-
-.sticky {
-    position: sticky;
-    top: 0;
 }
 
 .months {
@@ -177,7 +404,36 @@ section {
     grid-template-columns: repeat(3, 1fr);
     gap: 0.5em;
     padding-left: 0;
-    margin: 3em 0;
+    margin: 2.75em 0;
+
+    > li {
+        margin: 0;
+    }
+}
+
+.article {
+    > div > p:first-child::first-letter {
+        @media (min-width: 500px) {
+            float: left;
+            font-size: 7em;
+            border: 8px double hsl(0 0 50%);
+            padding: 0.1em;
+            margin-right: 0.066em;
+            font-style: normal;
+            font-family: var(--system-serif-fonts);
+        }
+    }
+
+    > footer {
+        font-style: italic;
+        font-size: 0.8em;
+        text-align: right;
+
+        > p {
+            margin-top: 2.75em;
+            margin-bottom: 0;
+        }
+    }
 }
 
 .articles {
@@ -197,7 +453,7 @@ section {
         }
     }
 
-    date {
+    time {
         border-top: 1px solid crimson;
         padding: 0.25em 0.5em;
     }
@@ -223,3 +479,88 @@ section {
         aspect-ratio: 1;
     }
 }
+
+.profiles {
+    display: flex;
+    gap: 1.66em;
+    list-style: none;
+    margin: 0;
+
+    > li {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* === /Components === */
+/* === 3. Layout === */
+/*
+Containers and wrappers for components.
+Only class selectors allowed, with the following element selectors as
+exceptions: aside, body, footer, header, main and nav.
+*/
+body {
+    margin: 0 auto;
+    max-width: 33em;
+    box-sizing: border-box;
+    min-height: 100vh;
+    padding: 0 0.5em;
+}
+/* === /Layout === */
+/* === 4. Pages === */
+/*
+Styles that should only apply to certain pages.
+*/
+/* === /Pages === */
+/* === 5. Themes === */
+/*
+Styles to create user-customized themes.
+
+This section adapts the design to the following user preferences:
+Color theme, reduced motion
+*/
+@media (prefers-color-scheme: light) {
+    :root {
+        --color: #000;
+        --bgcolor: #fff;
+    }
+}
+
+@media (prefers-reduced-motion) {
+    :root {
+        --animation-duration: 0;
+    }
+}
+
+@media (min-width: 800px) {
+    :root {
+        --map-ratio: 3 / 2;
+    }
+}
+
+@media (min-width: 1000px) {
+    :root {
+        --page-title-font-size: 4em;
+    }
+}
+/* === /Themes === */
+/* === 6. Vendors === */
+/*
+Styles belonging to third-party components.
+*/
+
+.footnotes-list {
+    color: var(--aside-color);
+    font-size: 80%;
+}
+/* === /Vendors === */
+
+/* === 7. Shame === */
+/*
+Styles necessary for specifity issues and for cutting corners
+(breaking the rules in short terms in waiting for an opportunity
+to rewrite or fix a problem for good).
+
+madr.se has no reason to feel ashamed. Yet.
+*/
+/* === /Shame === */

@@ -1,26 +1,24 @@
 <a href="#content" class="skiplink">Hoppa till innehållet</a>
 
 <nav>
-  <div>
-    <span class="sr-only">Du är här:</span>
-    <span class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <a href="/" rel="home">
-          <span itemprop="name">madr.se</span>
-        </a>
-        <meta itemprop="position" content="1" />
-      </span>
-      <%= for {index, {parent_slug, parent_name}} <- breadcrumbs(@breadcrumbs) do %>
-        <span class="sr-only">&gt;</span>
-        <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a href={parent_slug}>
-            <span itemprop="name"><%= parent_name %></span>
-          </a>
-          <meta itemprop="position" content={index} />
-        </span>
-      <% end %>
+  <span class="sr-only">Du är här:</span>
+  <span class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+    <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a href="/" rel="home">
+        <span itemprop="name">madr.se</span>
+      </a>
+      <meta itemprop="position" content="1" />
     </span>
-  </div>
+    <%= for {index, {parent_slug, parent_name}} <- breadcrumbs(@breadcrumbs) do %>
+      <span class="sr-only">&gt;</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href={parent_slug}>
+          <span itemprop="name"><%= parent_name %></span>
+        </a>
+        <meta itemprop="position" content={index} />
+      </span>
+    <% end %>
+  </span>
 </nav>
 <main id="content">
   <%= @inner_content %>

@@ -9,7 +9,7 @@ defmodule Mse25Web.PageController do
   def home(conn, _params) do
     [most_recent_article, older_article] = Directus.get_articles!(limit: 2)
     recent_event = Directus.get_events!(limit: 1)
-    upcoming_events = Directus.get_events!(limit: 1, upcoming: true)
+    upcoming_events = Directus.get_events!(limit: 2, upcoming: true)
     brutal_legends = Directus.get_albums!(limit: 1)
 
     render(conn, :home,
@@ -61,7 +61,7 @@ defmodule Mse25Web.PageController do
 
     render(conn, :articles,
       page_title: page_title,
-      breadcrumbs: [{"webblogg", "Webblogg"}],
+      breadcrumbs: [],
       articles: group_annually(articles),
       q: params["q"],
       nosearch?: params["q"] == nil or params["q"] == ""
