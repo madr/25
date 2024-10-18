@@ -3,93 +3,122 @@
   <h1 class="home-h1">Anders Englöf Ytterström</h1>
   <ul class="tree">
     <li class="article">
+      <span></span>
       <a href={"/" <> @recent_article["slug"]}>
         <%= @recent_article["title"] %>
       </a>
-      <small>(<time><%= @recent_article["pubDate"] %></time>)</small>
+      <small><time><%= @recent_article["pubDate"] %></time></small>
     </li>
     <li class="article">
+      <span></span>
       <a href={"/" <> @older_article["slug"]}>
         <%= @older_article["title"] %>
       </a>
-      <small>(<time><%= @older_article["pubDate"] %></time>)</small>
+      <small><time><%= @older_article["pubDate"] %></time></small>
     </li>
     <li class="page">
+      <span></span>
       <a href="/webblogg" class="list-link">Alla Webbloggens inlägg</a>
     </li>
     <%= for event <- @recent_event do %>
       <li class="events">
-        <a href={event["slug"]} title={event["lead"]}>
-          <%= event["title"] %> (<%= event["started_at"] %>)
-        </a>
         <%= if event["poster"] do %>
           <img
             src={"https://n.madr.se/assets/" <> event["poster"] <> "?key=thumbnail"}
             alt="affisch"
             loading="lazy"
           />
+        <% else %>
+          <span></span>
         <% end %>
+        <a href={event["slug"]} title={event["lead"]}>
+          <%= event["title"] %>
+        </a>
+        <small><time><%= event["started_at"] %></time></small>
       </li>
     <% end %>
     <%= for event <- @upcoming do %>
       <li class="events">
-        <a href={event["slug"]} title={event["lead"]}>
-          <%= event["title"] %> (<%= event["started_at"] %>)
-        </a>
         <%= if event["poster"] do %>
           <img
             src={"https://n.madr.se/assets/" <> event["poster"] <> "?key=thumbnail"}
             alt="affisch"
             loading="lazy"
           />
+        <% else %>
+          <span></span>
         <% end %>
+        <%= event["title"] %>
+        <small><time><%= event["started_at"] %></time></small>
       </li>
     <% end %>
     <li class="feed events page">
+      <span></span>
       <a href="/evenemang" class="list-link">Evenemangstidslinje</a>
+      <span></span>
     </li>
     <li class="feed events ics">
+      <span></span>
       <a href="/kommande-evenemang.ics" class="feed-link">Kommande evenemang</a>
-      <small>(vcalendar)</small>
+      <small>.ics</small>
     </li>
     <li class="feed links">
+      <span></span>
       <a href="/delningar" class="list-link">
         Delningar
       </a>
+      <span></span>
     </li>
     <%= for legend <- @brutal_legends do %>
       <li class="album">
+        <%= if legend["cover"] do %>
+          <img
+            src={"https://n.madr.se/assets/" <> legend["cover"] <> "?key=thumbnail"}
+            alt="skivomslag"
+            loading="lazy"
+          />
+        <% else %>
+          <span></span>
+        <% end %>
         <a href={"/" <> legend["purchase_year"] <> "/brutal-legend-" <> legend["externalId"]}>
           <%= legend["artist"] %> - <%= legend["album"] %> (<%= legend["year"] %>)
         </a>
+        <span></span>
       </li>
     <% end %>
     <li class="page">
+      <span></span>
       <a href="/vad-jag-gor">
         Vad jag gör
       </a>
+      <span></span>
     </li>
     <li class="page">
+      <span></span>
       <a href="/om">
         Anders, 39, Hårdrockare
       </a>
+      <span></span>
     </li>
     <li class="feed rss">
-      <a href="/prenumerera.xml" class="feed-link">Prenumerera</a> <small>(RSS 2.0)</small>
+      <span></span>
+      <a href="/prenumerera.xml" class="feed-link">Prenumerera</a>
+      <small>.rss</small>
     </li>
     <li class="">
-      <a clasS="feed-link" href="aey.vcard">
+      <span></span>
+      <a clasS="feed-link" href={~p"/andersy.vcf"}>
         Kontakt
       </a>
-      <small>(vcard)</small>
+      <small>.vcf</small>
     </li>
   </ul>
-  <form method="get" action="/sok">
+  <form method="get" action="/sok" class="home-search">
     <label for="q">Sök innehåll</label>: <input size="9" type="search" id="q" name="q" />
     <button>Sök</button>
   </form>
   <ul class="profiles">
-    <li><a href="/cv.html">CV</a></li>
+    <li><a href={~p"/andersy.vcf"}>CV</a></li>
     <li><a href="https://github.com/madr">Github</a></li>
     <li>
       <a href="https://www.discogs.com/user/madrse/collection?limit=250&sort=artist&sort_order=asc&layout=big">

@@ -37,6 +37,7 @@ This is to avoid redeclarating CSS rules.
     --panel-bg-color: hsla(0 0 50% / 0.16);
     --monospace-color: springgreen;
     --monospace-color-inline: seagreen;
+    --a-color: gold;
 
     /* typography, mobile first */
     --base-font-size: 1.33em;
@@ -83,6 +84,10 @@ body {
         color: #666;
         font-size: 0.66em;
     }
+}
+
+a {
+    color: var(--a-color);
 }
 
 input,
@@ -263,6 +268,11 @@ nature of this site. As a general rule though, classes are the most
 versatile.
 */
 
+.home-search,
+.profiles {
+    font-size: var(--tree-font-size);
+}
+
 .sr-only {
     position: absolute;
     left: -999em;
@@ -320,13 +330,16 @@ versatile.
     font-size: var(--tree-font-size);
 
     > li {
-        display: flex;
+        text-align: center;
+        display: grid;
+        grid-template-columns: 50px 1fr auto;
         align-items: center;
         margin: 0;
         gap: 0.5em;
-        padding: 1.33em 0.5em;
-        background-color: rgba(128, 128, 128, 0.16);
-        border-left: 6px solid var(--tree-item-accent-color);
+        padding: 0.75em;
+        min-height: 50px;
+        background-color: rgba(128, 128, 128, 0.1);
+        border: 1px solid rgba(192, 192, 192, 0.1);
 
         &:focus-within {
             background-color: rgba(128, 128, 128, 0.25);
@@ -523,6 +536,7 @@ Color theme, reduced motion
     :root {
         --color: #000;
         --bgcolor: #fff;
+        --a-color: blue;
     }
 }
 
