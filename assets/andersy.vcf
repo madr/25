@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:4.0
+N:Ytterström;Anders;;Mr.;
+FN:Anders Ytterström
+ORG:Kundo
+TITLE:Webbutvecklare/hårdrockare
+PHOTO;MEDIATYPE=image/gif:https://madr.se/mugshot.jpg
+TEL;TYPE=home,voice;VALUE=uri:tel:+46-70-216-9645
+EMAIL:yttan@fastmail.se
+REV:20191006T195243Z
+x-qq:21588891
+END:VCARD
